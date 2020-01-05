@@ -12,7 +12,7 @@ node('master') {
         load('resources/config/groovy/scriptApproval.groovy')
 
         // run configuration from config file
-        load('resources/config/groovy/triggerConfigurationAsCodePlugin.groovy')
+        load('resources/config/groovy/cascPlugin.groovy')
 
         // set public key for bootstrapping user
         load('resources/config/groovy/userPublicKeys.groovy')

@@ -5,7 +5,7 @@ import static org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval.get
 get().approveSignature('staticMethod jenkins.model.Jenkins getInstance')
 get().approveSignature('method jenkins.model.Jenkins setCrumbIssuer hudson.security.csrf.CrumbIssuer')
 
-//used in triggerConfigurationAsCodePlugin.groovy
+//used in cascPlugin.groovy
 get().approveSignature('method jenkins.model.Jenkins getExtensionList java.lang.Class')
 get().approveSignature('method io.jenkins.plugins.casc.ConfigurationAsCode configure')
 

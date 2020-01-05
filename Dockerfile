@@ -10,6 +10,8 @@ USER jenkins
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 
+#ENV CASC_JENKINS_CONFIG=${JENKINS_HOME}/casc-config/
+
 # Add minimum jenkins setup
 COPY --chown=jenkins init.groovy.d /usr/share/jenkins/ref/init.groovy.d
 COPY --chown=jenkins dsl /usr/share/jenkins/ref/dsl

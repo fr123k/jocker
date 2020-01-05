@@ -2,10 +2,6 @@
 jenkins:
   numExecutors: 1
 
-  markupFormatter:
-    rawHtml:
-      disableSyntaxHighlighting: false
-
   remotingSecurity:
     enabled: false
 
@@ -15,18 +11,15 @@ jenkins:
           - key: "ENV1"
             value: "VALUE1"
 
-  authorizationStrategy:
-    globalMatrix:
-      permissions:
-        - "Overall/Administer:admin"
+  # authorizationStrategy:
+  #   globalMatrix:
+  #     permissions:
+  #       - "Overall/Administer:admin"
 
   # JNLP port for remote agents
   slaveAgentPort: 50000
   agentProtocols:
     - "JNLP4-connect"
-
-  securityRealm:
-    github:
 
 security:
   globalJobDslSecurityConfiguration:

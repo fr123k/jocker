@@ -11,4 +11,4 @@ script:
 
 after_success:
 - make jocker
-- make test
+- make test || travis_terminate 1
