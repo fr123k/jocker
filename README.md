@@ -36,7 +36,7 @@ make jocker logs
 
 ## Contribution
 
-Big thank goes to [fishi0x01-gc](https://github.com/fishi0x01-gc).
+Big thank goes to [fishi0x01](https://github.com/fishi0x01).
+
 Who convince and inspired my for the whole jenkins in docker approach and also
-builded the first poc of it. Most of this repository is build on top of `fishi0x01-gc`
-poc.
+builded the first [jenkins-as-code](https://github.com/devtail/jenkins-as-code) poc of it. Most of this repository is build on top of `jenkins-as-code` repository.

@@ -43,26 +43,26 @@ Jenkins.instance.getItemByFullName("Jenkins/Configure").scheduleBuild()
 println(Jenkins.instance.getSecurityRealm().getClass().getSimpleName())
 // Disable Wizards
 if(Jenkins.instance.getSecurityRealm().getClass().getSimpleName() == 'None') {
-    // def instance = Jenkins.getInstance()
-    // def setupUser = "admin"
-    // def setupPass = "admin"
+    def instance = Jenkins.getInstance()
+    def setupUser = "admin"
+    def setupPass = "admin"
 
-    // def hudsonRealm = new HudsonPrivateSecurityRealm(false)
-    // instance.setSecurityRealm(hudsonRealm)
-    // def user = instance.getSecurityRealm().createAccount(setupUser, setupPass)
-    // user.save()
+    def hudsonRealm = new HudsonPrivateSecurityRealm(false)
+    instance.setSecurityRealm(hudsonRealm)
+    def user = instance.getSecurityRealm().createAccount(setupUser, setupPass)
+    user.save()
 
-    // def prop = user.getProperty(ApiTokenProperty.class)
-    // def result = prop.tokenStore.generateNewToken("token-created-by-init-groovy")
-    // user.save()
+    def prop = user.getProperty(ApiTokenProperty.class)
+    def result = prop.tokenStore.generateNewToken("token-created-by-init-groovy")
+    user.save()
 
-    // println("###################################################\n## Api-Token: " + result.plainValue + " ##\n###################################################")
+    println("###################################################\n## Api-Token: " + result.plainValue + " ##\n###################################################")
 
-    // def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
-    // strategy.setAllowAnonymousRead(true)
-    // instance.setAuthorizationStrategy(strategy)
+    def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
+    strategy.setAllowAnonymousRead(false)
+    instance.setAuthorizationStrategy(strategy)
 
-    // instance.save()
+    instance.save()
 
     println("SetupWizard Disabled")
 }

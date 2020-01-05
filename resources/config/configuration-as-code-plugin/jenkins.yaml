@@ -3,7 +3,7 @@ jenkins:
   numExecutors: 1
 
   remotingSecurity:
-    enabled: false
+    enabled: true
 
   globalNodeProperties:
     - envVars:
@@ -11,10 +11,10 @@ jenkins:
           - key: "ENV1"
             value: "VALUE1"
 
-  # authorizationStrategy:
-  #   globalMatrix:
-  #     permissions:
-  #       - "Overall/Administer:admin"
+  authorizationStrategy:
+    globalMatrix:
+      permissions:
+        - "Overall/Administer:admin"
 
   # JNLP port for remote agents
   slaveAgentPort: 50000
