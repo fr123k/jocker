@@ -1,4 +1,4 @@
-# jenkins in docker
+# jocker (jenkins in docker)
 
 ## Introduction
 
@@ -16,14 +16,6 @@ following 3 jobs.
 
 The seed job that can create all the other jobs. For a simple setup the seed job does nothing. The test job are defined inside the seed job definition.
 
-* `provision-redis`
-
-The test job the simulate the provision of two redis servers.
-
-* `provision-elasticsearch`
-
-The test job the simulate the provision of one elasticsearch server.
-
 ## Build
 
 To build the jenkins in docker image run the listed command below.
@@ -32,14 +24,12 @@ To build the jenkins in docker image run the listed command below.
 make build
 ```
 
-
-
 ## Usage
 
 ```bash
-make denkins
+make jocker logs
 ```
-[Jenkins](http://localhost:8888/)
+[Jenkins](http://localhost:8080/)
 
 
 ## Contribution

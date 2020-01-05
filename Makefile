@@ -8,7 +8,12 @@ jocker: build ## Start the jenkins in docker container short denkins.
 	docker run -d -p 8080:8080 --name jocker --rm ${IMAGE}
 
 logs: ## Show the logs of the jocker container
-	watch docker logs $(shell docker ps -f ancestor=jocker -q) 
+	watch docker logs $(shell docker ps -f ancestor=jocker -q)
+
+test:
+	sleep 60
+	docker logs $(shell docker ps -f ancestor=jocker -q)
+	@curl -s http://localhost:8080/job/Jenkins/job/Configure/lastBuild/api/json | jq -r .result | grep SUCCESS
 
 # Absolutely awesome: http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help: ## Print this help.
