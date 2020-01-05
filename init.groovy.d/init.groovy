@@ -21,24 +21,33 @@ import jenkins.security.apitoken.*
 
 def domain = Domain.global()
 def store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.SystemCredentialsProvider')[0].getStore()
-def keyFileContents = new File("/var/jenkins_home/deployKey/jocker-shared-library-private-key").text
-def privateKey = new BasicSSHUserPrivateKey(
-  CredentialsScope.GLOBAL,
-  "github-ssh-jocker",
-  "root",
-  new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(keyFileContents),
-  "",
-  "SSH key for shared-library"
-)
-store.addCredentials(domain, privateKey)
+
+def keyFiles = new File("/var/jenkins_home/deployKeys/").listFiles();
+for (File privateKeyFile : keyFiles) {
+    def keyFileContents = privateKeyFile.text
+    System.out.println(privateKeyFile.getName())
+    def privateKey = new BasicSSHUserPrivateKey(
+      CredentialsScope.GLOBAL,
+      privateKeyFile.getName(),
+      "root",
+      new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(keyFileContents),
+      "",
+      "SSH key for " + privateKeyFile.getName()
+    )
+    store.addCredentials(domain, privateKey)
+}
 
 // Create the configuration pipeline from a jobDSL script
 def jobDslScript = new File('/var/jenkins_home/dsl/bootstrap.groovy')
 def workspace = new File('.')
 def jobManagement = new JenkinsJobManagement(System.out, [:], workspace)
 new DslScriptLoader(jobManagement).runScript(jobDslScript.text)
+
 // Schdule the Jenkins/Configure job
-Jenkins.instance.getItemByFullName("Jenkins/Configure").scheduleBuild()
+// Use the provided SEED_BRANCH environment vairable if specified
+def ENV_SEED_BRANCH = System.getenv("SEED_BRANCH")
+def seedRevision = ENV_SEED_BRANCH != null ? ENV_SEED_BRANCH : "origin/master"
+Jenkins.instance.getItemByFullName("Jenkins/Configure").scheduleBuild2(1, new ParametersAction([ new StringParameterValue("revision", seedRevision)]))
 
 println(Jenkins.instance.getSecurityRealm().getClass().getSimpleName())
 // Disable Wizards
