@@ -5,12 +5,13 @@ build: ## Build the jenkins in docker image.
 
 jocker: build ## Start the jenkins in docker container short denkins.
 	docker kill jocker || echo "Ignore failure"
-	docker run -d -p 8080:8080 --name jocker --rm ${IMAGE}
+	echo "SEED_BRANCH='${TRAVIS_BRANCH}'"
+	docker run -d -p 8080:8080 -e SEED_BRANCH=${TRAVIS_BRANCH} --name jocker --rm ${IMAGE}
 
 logs: ## Show the logs of the jocker container
 	watch docker logs $(shell docker ps -f ancestor=jocker -q)
 
-test:
+test: ## Wait 60 seconds and then check the build status of the Configure job to fail if status is not SUCCESS.
 	sleep 60
 	docker logs $(shell docker ps -f ancestor=jocker -q)
 	@curl -s http://admin:admin@localhost:8080/job/Jenkins/job/Configure/lastBuild/consoleText

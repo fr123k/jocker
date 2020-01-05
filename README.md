@@ -33,6 +33,47 @@ make jocker logs
 ```
 [Jenkins](http://localhost:8080/)
 
+## Structure
+
+```
+├── deployKeys
+├── dsl
+├── init.groovy.d
+└── shared-library
+```
+```
+├── Dockerfile
+├── Makefile
+├── README.md
+├── deployKey
+│   └── jocker-shared-library-private-key
+├── dsl
+│   └── bootstrap.groovy
+├── init.groovy.d
+│   ├── init.groovy
+│   └── scriptApproval.xml
+├── plugins.txt
+└── shared-library
+    ├── config
+    │   ├── casc-plugin
+    │   │   ├── credentials.yaml                # define jenkins credential secrets like deploy key's for example.
+    │   │   └── jenkins.yaml
+    │   └── groovy
+    │       ├── cascPlugin.groovy
+    │       ├── csrf.groovy
+    │       ├── scriptApproval.groovy
+    │       ├── timezone.groovy
+    │       └── userPublicKeys.groovy
+    ├── jobDSL
+    │   └── folders.groovy
+    └── pipeline.groovy
+```
+
+### Configuration as Code Plugin
+
+The casc (Configuration as Code) plugin overwrites any previous defined configuration. There is no merge strategy.
+
+**Be care full the deploy keys defined in the `init.groovy` file are overwritten by the `credentials.yaml` casc configuration file. That's why the deploy key is defined twice once in the `deploy-key-shared-library` file and in the `credentials.yaml` casc file.**
 
 ## Contribution
 
@@ -40,3 +81,8 @@ Big thank goes to [fishi0x01](https://github.com/fishi0x01).
 
 Who convince and inspired my for the whole jenkins in docker approach and also
 builded the first [jenkins-as-code](https://github.com/devtail/jenkins-as-code) poc of it. Most of this repository is build on top of `jenkins-as-code` repository.
+
+## TODO
+
+* add generated admin user api token as credentials to jenkins for further usage in other build jobs
+* pass shared library deploy key at runtime

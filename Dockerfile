@@ -15,7 +15,7 @@ RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 # Add minimum jenkins setup
 COPY --chown=jenkins init.groovy.d /usr/share/jenkins/ref/init.groovy.d
 COPY --chown=jenkins dsl /usr/share/jenkins/ref/dsl
-COPY --chown=jenkins deployKey /usr/share/jenkins/ref/deployKey
+COPY --chown=jenkins deployKeys /usr/share/jenkins/ref/deployKeys
 COPY --chown=jenkins init.groovy.d/scriptApproval.xml /usr/share/jenkins/ref/
 
 
