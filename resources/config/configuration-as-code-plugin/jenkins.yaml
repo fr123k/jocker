@@ -1,0 +1,48 @@
+---
+jenkins:
+  numExecutors: 1
+
+  markupFormatter:
+    rawHtml:
+      disableSyntaxHighlighting: false
+
+  remotingSecurity:
+    enabled: false
+
+  globalNodeProperties:
+    - envVars:
+        env:
+          - key: "ENV1"
+            value: "VALUE1"
+
+  authorizationStrategy:
+    globalMatrix:
+      permissions:
+        - "Overall/Administer:admin"
+
+  # JNLP port for remote agents
+  slaveAgentPort: 50000
+  agentProtocols:
+    - "JNLP4-connect"
+
+  securityRealm:
+    github:
+
+security:
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false
+  sSHD:
+    port: 6666
+
+unclassified:
+
+  globalLibraries:
+    libraries:
+      - name: "shared-lib"
+        includeInChangesets: false
+        retriever:
+          modernSCM:
+            scm:
+              git:
+                remote: "git@github.com:fr123k/jocker"
+                credentialsId: "github-ssh-jocker"

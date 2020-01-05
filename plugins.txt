@@ -1,0 +1,15 @@
+# plugins for pipeline setup
+cloudbees-folder
+job-dsl
+pipeline-model-definition
+
+# plugins for remote pipeline within github
+git
+git-parameter
+github
+
+# provide cleanWs pipeline method
+ws-cleanup
+
+# provide casc plugin
+configuration-as-code

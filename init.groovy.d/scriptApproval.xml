@@ -1,0 +1,13 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<scriptApproval plugin="script-security@1.68">
+  <approvedScriptHashes/>
+  <approvedSignatures>
+    <string>method org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval approveSignature java.lang.String</string>
+    <string>staticMethod org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval get</string>
+  </approvedSignatures>
+  <aclApprovedSignatures/>
+  <approvedClasspathEntries/>
+  <pendingScripts/>
+  <pendingSignatures/>
+  <pendingClasspathEntries/>
+</scriptApproval>
