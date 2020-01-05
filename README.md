@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/fr123k/jocker.svg?branch=master)](https://travis-ci.com/fr123k/jocker)
+
 # jocker (jenkins in docker)
 
 ## Introduction
