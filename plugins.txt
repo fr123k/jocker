@@ -17,3 +17,8 @@ ws-cleanup
 # provide casc plugin
 configuration-as-code
 #configuration-as-code-support
+
+# provide remote agent launch support
+command-launcher
+slave-setup
+throttle-concurrents

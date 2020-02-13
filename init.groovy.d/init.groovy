@@ -37,16 +37,21 @@ for (File privateKeyFile : keyFiles) {
     store.addCredentials(domain, privateKey)
 }
 
+def env = System.getenv()
+
 // Create the configuration pipeline from a jobDSL script
-def jobDslScript = new File('/var/jenkins_home/dsl/bootstrap.groovy')
+def jobDslScriptContent = new File('/var/jenkins_home/dsl/bootstrap.groovy').text
+jobDslScriptContent = jobDslScriptContent.replace('{{ shared-library-git-repo }}', env['BOOTSTRAP_SHARED_LIBRARY_GIT_REPO'])
+jobDslScriptContent = jobDslScriptContent.replace('{{ shared-library-groovy-file }}', env['BOOTSTRAP_SHARED_LIBRARY_GROOVY_FILE'])
+
 def workspace = new File('.')
 def jobManagement = new JenkinsJobManagement(System.out, [:], workspace)
-new DslScriptLoader(jobManagement).runScript(jobDslScript.text)
+new DslScriptLoader(jobManagement).runScript(jobDslScriptContent)
 
 // Schdule the Jenkins/Configure job
 // Use the provided SEED_BRANCH environment vairable if specified
-def ENV_SEED_BRANCH = System.getenv("SEED_BRANCH")
-def seedRevision = ENV_SEED_BRANCH != null ? ENV_SEED_BRANCH : "origin/master"
+def ENV_SEED_BRANCH = env['SEED_BRANCH']
+def seedRevision = ENV_SEED_BRANCH ?: "origin/master"
 Jenkins.instance.getItemByFullName("Jenkins/Configure").scheduleBuild2(1, new ParametersAction([ new StringParameterValue("revision", seedRevision)]))
 
 println(Jenkins.instance.getSecurityRealm().getClass().getSimpleName())
@@ -61,6 +66,7 @@ if(Jenkins.instance.getSecurityRealm().getClass().getSimpleName() == 'None') {
     def user = instance.getSecurityRealm().createAccount(setupUser, setupPass)
     user.save()
 
+    //Create api token for the user for jenkins remote calls
     def prop = user.getProperty(ApiTokenProperty.class)
     def result = prop.tokenStore.generateNewToken("token-created-by-init-groovy")
     user.save()

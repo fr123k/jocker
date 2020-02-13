@@ -75,6 +75,10 @@ The casc (Configuration as Code) plugin overwrites any previous defined configur
 
 **Be care full the deploy keys defined in the `init.groovy` file are overwritten by the `credentials.yaml` casc configuration file. That's why the deploy key is defined twice once in the `deploy-key-shared-library` file and in the `credentials.yaml` casc file.**
 
+### Configure Shared Library
+
+The Shared Library contains
+
 ## Contribution
 
 Big thank goes to [fishi0x01](https://github.com/fishi0x01).
@@ -86,3 +90,8 @@ builded the first [jenkins-as-code](https://github.com/devtail/jenkins-as-code) 
 
 * add generated admin user api token as credentials to jenkins for further usage in other build jobs
 * pass shared library deploy key at runtime
+
+## History
+
+13.02.2020
+* configure shared libary git repository as docker environment variable

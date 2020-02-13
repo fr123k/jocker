@@ -26,15 +26,15 @@ pipelineJob("Jenkins/Configure") {
             scm {
                 git {
                     remote {
-                        github("fr123k/jocker", "ssh")
+                        github("{{ shared-library-git-repo }}", "ssh")
                         credentials("deploy-key-shared-library")
                     }
 
                     branch('$revision')
                 }
             }
-            
-            scriptPath('shared-library/pipeline.groovy')
+            //shared-library/pipeline.groovy
+            scriptPath('{{ shared-library-groovy-file }}')
         }
     }
 }

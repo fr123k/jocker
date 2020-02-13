@@ -1,0 +1,23 @@
+---
+jenkins:
+  nodes:
+    ########
+    # Deploy
+    ########
+    - permanent:
+        labelString: "docker"
+        name: "docker-1"
+        nodeName: "docker-1"
+        numExecutors: 2
+        remoteFS: "/home/jenkins/"
+        launcher:
+          setupSlaveLauncher:
+            startScript: "java -jar ${JENKINS_CLI} -s http://host.docker.internal:8080 -ssh -user admin -i ${HOME}/.ssh/jenkins-cli build 'Jenkins/DockerAgentBootstrap' -p agentID='docker-1' -p image='fr123k/jocker-agent:2.204.2' -s"
+            stopScript: "java -jar ${JENKINS_CLI} -s http://host.docker.internal:8080 -ssh -user admin -i ${HOME}/.ssh/jenkins-cli build 'Jenkins/DockerAgentDestroy' -p agentID='docker-1' -p image='fr123k/jocker-agent:2.204.2' -s"
+            launcher:
+              command:
+                command: "bash -c \"ssh -v -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" -i ${HOME}/.ssh/agent-access jenkins@${PREFIX}-deploy-openstack-1.private.os.fra1.hpsgc.de AGENT_URL=\"https://${INTERNAL_MASTER_URL}/jnlpJars/agent.jar\" /bin/agent\""
+        retentionStrategy:
+          demand:
+            idleDelay: 10000
+            inDemandDelay: 0
