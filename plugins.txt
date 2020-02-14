@@ -22,3 +22,6 @@ configuration-as-code
 command-launcher
 slave-setup
 throttle-concurrents
+
+# mask password
+mask-passwords

@@ -11,7 +11,7 @@ release: build ## Push docker image to docker hub
 jocker: build ## Start the jenkins in docker container short denkins.
 	docker kill jocker || echo "Ignore failure"
 	echo "SEED_BRANCH='${TRAVIS_BRANCH}'"
-	docker run -v /var/run/docker.sock:/var/run/docker.sock -e -d -p 8080:8080 -e SEED_BRANCH=${TRAVIS_BRANCH} --name jocker --rm ${IMAGE}
+	docker run -v /var/run/docker.sock:/var/run/docker.sock -e -d -p 50000:50000 -p 8080:8080 -e SEED_BRANCH=${TRAVIS_BRANCH} --name jocker --rm ${IMAGE}
 
 logs: ## Show the logs of the jocker container
 	watch docker logs $(shell docker ps -f name=jocker -q)

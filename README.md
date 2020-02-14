@@ -79,6 +79,13 @@ The casc (Configuration as Code) plugin overwrites any previous defined configur
 
 The Shared Library contains
 
+### Jenkins CLI
+
+Need open jenkins cli port default is 50000
+```bash
+curl -sI  http://host.docker.internal:8080
+```
+
 ## Contribution
 
 Big thank goes to [fishi0x01](https://github.com/fishi0x01).

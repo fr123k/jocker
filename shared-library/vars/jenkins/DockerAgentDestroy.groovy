@@ -8,13 +8,11 @@ node('master') {
 
     stage('Destroy Agent') {
         wrap([$class: 'MaskPasswordsBuildWrapper', varPasswordPairs: []]) {
-            ansiColor('xterm') {
-                try {
-                    sh("docker kill ${params.agentID}")
-                } catch(Exception e) {
-                    echo "${e}"
-                    currentBuild.result = 'FAILURE'
-                }
+            try {
+                sh("docker kill ${params.agentID}")
+            } catch(Exception e) {
+                echo "${e}"
+                currentBuild.result = 'FAILURE'
             }
         }
     }
