@@ -22,6 +22,10 @@ import jenkins.security.apitoken.*
 def domain = Domain.global()
 def store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.SystemCredentialsProvider')[0].getStore()
 
+//Generate a private/public key pair for jenkins-cli authention used by the agent bootstrap
+def proc = ['ssh-keygen','-t', 'rsa','-b','4096','-q','-N','', '-f', '/var/jenkins_home/.ssh/jenkins-cli'].execute();
+proc.waitForProcessOutput(System.out, System.err);
+
 def keyFiles = new File("/var/jenkins_home/deployKeys/").listFiles();
 for (File privateKeyFile : keyFiles) {
     def keyFileContents = privateKeyFile.text

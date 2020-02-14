@@ -21,3 +21,5 @@ COPY --chown=jenkins init.groovy.d/scriptApproval.xml /usr/share/jenkins/ref/
 
 # Disable the setup wizard 
 ENV JAVA_OPTS "-Djenkins.install.runSetupWizard=false ${JAVA_OPTS:-}"
+
+ENV JENKINS_CLI /var/jenkins_home/war/WEB-INF/jenkins-cli.jar

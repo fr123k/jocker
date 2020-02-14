@@ -12,3 +12,5 @@ script:
 after_success:
 - make jocker
 - make test || travis_terminate 1
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+

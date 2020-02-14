@@ -15,6 +15,8 @@ get().approveSignature('staticMethod java.lang.System getenv')
 get().approveSignature('new org.jenkinsci.main.modules.cli.auth.ssh.UserPropertyImpl java.lang.String')
 get().approveSignature('method hudson.model.User addProperty hudson.model.UserProperty')
 get().approveSignature('method hudson.model.Saveable save')
+get().approveSignature('new java.io.File java.lang.String')
+get().approveSignature('staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods getText java.io.File')
 
 //used in timezone.groovy
 get().approveSignature('staticMethod org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval get')
