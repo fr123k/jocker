@@ -1,16 +1,19 @@
 sudo: required
-
 env:
+  matrix:
   - IMAGE_NAME="jocker"
-
+  global:
+  - secure: Hgzw2Cy+LmV8aO+mM5ACeTkI2wuG8t9ESorWQyUpPwsqiXIyf0i6wLnGUsDuz34/5my1BLxUtjTxj/Zh309I3Pv/jfEiHXayE7oVqB8Q8gi7mAGNpyPDh0rknWdODNDRg/fiBo2NmL6MZSpOiDDUFN8MftdyL+R9+bpqwyNL0B9WE0qMLB8XVwLx2X6uviSuPZN8vDMD2JY4CIMSdvQqVTT4J8Y7OUwA/w4Fd5ObUqg+PzaN6PVIVOFmnbDvQr1OWzfEVG/CL83OveP9USzuGF2YV/Y92fI4lesD+l2PbNKie4sWZy0PYpskl/kw8b8MI2NdEcIR3bPCqOZW5N5opq0enKrpNCDYi438J1XzmFRfxqKxIk61EWfkEop3hYwQvjiOMfxB8CfCDZ6OyC1Ry53NmURjZg8W0XMJgrSlV8KCLWAHeG0zngbAGhqiEn7eG+XE6UgyR6sdRWEaZWmUS34HPOp7XZ07CCdv+xfzpfxE55Zz8vs3V8KSlENl0Q6hWI7rL5xr5qZc/M6yvwWTKgEvY3+ZlpqPncBO04sxmwBG/NZbS/xDtR62T0GnasrX1nnrSvQuGdgFx79wYh/6UA9xFmVyFe3KRdA7hZJULAeYqtRdJkNHGxGmLOS0cTXDCMHF3zmEhjcrTt4GOxPRl9wdL5+mrP0FBthAJmjksTQ=
+  - secure: TvPg3r2RJ8xANXk/fJegIHmjxd1N4FCNRlf026/1sNUg+5bIsOYgv+auBN6RjQ0sVKOn9bqxYKAZfShNUaDMV0t1y7t4TG9PoxLI/yfh19Gjry1Y02E3jGyLSyMsiYNlMaXpkkpJ70blxANKnw5TxQPhPJCLpq77vdpV4fDXxSP+nlEOp3yNXRdr9nHn7UGBNgZiVY4eNQO0NCByVb22JL/B4W8aLFtGALRJFSn4SbkIIfUXSZ0GBtzApQTpSPmRoY+SoNPcqrT2f3WVauAKwsAgcfcjS0csmRcIqk1J+h2HSewKv+0Y2X8aUvqjCvppDdw0bGDhukd8gLZMJlDskWqIOognc8IhW1gVDrvSDx/uIWb1B1V0qetfodnc6DNCnnvEFtFZBBATrWn7tnrLoIqwEQzdSbv4GBfuEll/uPBdvOC8aphwICOx/oLMpCP8ZlNRp/lUFEG5ZnFYVqbCne8idNuPGYL6P4ZzN71pI9J+P/hDpOabtQF6eFWTu6oB4jIPocUC162PUma8CHOlGiPn0WHVkkIMxUFokuooMjp8x0hYrpIuk+ePdCZK2NVh4hK7wGLAv6rRHHsBaRhw+N3ei/cwuGNKi1nKaPLMb1U+Fkl3yAj+P61qOfrwL8fKy4/KEiTQ8FyVWAX476fjef6yQHRhfFcOOhoDejhWmps=
 services:
 - docker
-
+before_script:
+- make pull-base
+- curl ipinfo.io/ip
 script:
 - make build
-
 after_success:
 - make jocker
 - make test || travis_terminate 1
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-
+- make release

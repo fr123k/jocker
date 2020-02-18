@@ -1,17 +1,24 @@
 
 VERSION=$(shell docker image inspect jenkins/jenkins:lts | jq -r '.[0].ContainerConfig.Env[] | select(contains("JENKINS_VERSION"))' | cut -d'=' -f 2)
-export IMAGE="fr123k/jocker:${VERSION}"
+export NAME=fr123k/jocker
+export IMAGE="${NAME}:${VERSION}"
+export LATEST="${NAME}:latest"
+
+
+pull-base:  ## Push docker image to docker hub
+	docker pull jenkins/jenkins:lts
 
 build: ## Build the jenkins in docker image.
 	docker build -t $(IMAGE) -f Dockerfile .
 
 release: build ## Push docker image to docker hub
-	docker push $(IMAGE)
+	docker tag ${IMAGE} ${LATEST}
+	docker push ${NAME}
 
 jocker: build ## Start the jenkins in docker container short denkins.
 	docker kill jocker || echo "Ignore failure"
 	echo "SEED_BRANCH='${TRAVIS_BRANCH}'"
-	docker run -v /var/run/docker.sock:/var/run/docker.sock -e -d -p 50000:50000 -p 8080:8080 -e SEED_BRANCH=${TRAVIS_BRANCH} --name jocker --rm ${IMAGE}
+	docker run -d -p 50000:50000 -p 8080:8080 -e SEED_BRANCH=${TRAVIS_BRANCH} --name jocker --rm ${IMAGE}
 
 logs: ## Show the logs of the jocker container
 	watch docker logs $(shell docker ps -f name=jocker -q)
