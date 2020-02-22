@@ -2,6 +2,7 @@
 <scriptApproval plugin="script-security@1.68">
   <approvedScriptHashes/>
   <approvedSignatures>
+    <string>method org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval approveScript java.lang.String</string>
     <string>method org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval approveSignature java.lang.String</string>
     <string>staticMethod org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval get</string>
   </approvedSignatures>
