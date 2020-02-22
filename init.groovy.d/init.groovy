@@ -75,7 +75,7 @@ if(Jenkins.instance.getSecurityRealm().getClass().getSimpleName() == 'None') {
     def result = prop.tokenStore.generateNewToken("token-created-by-init-groovy")
     user.save()
 
-    println("###################################################\n## Api-Token: " + result.plainValue + " ##\n###################################################")
+    println("###################################################\nApi-Token:" + result.plainValue + "\n###################################################")
 
     def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
     strategy.setAllowAnonymousRead(false)
