@@ -14,6 +14,7 @@ script:
 - make build
 after_success:
 - make jocker
+- sleep 60 # wait for the jenkins to finish boostraping
 - make test || travis_terminate 1
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - make release

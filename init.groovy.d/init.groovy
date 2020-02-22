@@ -19,6 +19,13 @@ import hudson.model.*
 import jenkins.security.*
 import jenkins.security.apitoken.*
 
+// for generate randome alphanumeric strings
+def generator = { String alphabet, int n ->
+  new Random().with {
+    (1..n).collect { alphabet[ nextInt( alphabet.length() ) ] }.join()
+  }
+}
+
 def domain = Domain.global()
 def store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.SystemCredentialsProvider')[0].getStore()
 
@@ -63,7 +70,9 @@ println(Jenkins.instance.getSecurityRealm().getClass().getSimpleName())
 if(Jenkins.instance.getSecurityRealm().getClass().getSimpleName() == 'None') {
     def instance = Jenkins.getInstance()
     def setupUser = "admin"
-    def setupPass = "admin"
+    def setupPass = generator( (('A'..'Z')+('0'..'9')+('a'..'z')).join(), 15 )
+
+    println("###################################################\nPassword:" + setupPass + "\n###################################################")
 
     def hudsonRealm = new HudsonPrivateSecurityRealm(false)
     instance.setSecurityRealm(hudsonRealm)

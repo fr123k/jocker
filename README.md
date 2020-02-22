@@ -102,3 +102,7 @@ builded the first [jenkins-as-code](https://github.com/devtail/jenkins-as-code) 
 
 13.02.2020
 * configure shared libary git repository as docker environment variable
+
+22.02.2020
+* add random password creation for user admin
+* add approveScript method signature to the scriptApproval.xml file
