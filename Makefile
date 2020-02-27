@@ -23,7 +23,7 @@ jocker: build ## Start the jenkins in docker container short denkins.
 	docker run -d -p 50000:50000 -p 8080:8080 -e SEED_BRANCH=${TRAVIS_BRANCH} --name jocker --rm ${IMAGE}
 
 logs: ## Show the logs of the jocker container
-	watch docker logs $(shell docker ps -f name=jocker -q)
+	docker logs -f $(shell docker ps -f name=jocker -q)
 
 test: ## Wait 60 seconds and then check the build status of the Configure job to fail if status is not SUCCESS.
 	docker logs $(shell docker ps -f name=jocker -q)
