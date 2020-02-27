@@ -19,6 +19,10 @@ import hudson.model.*
 import jenkins.security.*
 import jenkins.security.apitoken.*
 
+def adminPassword = { ->
+  return System.getenv()['ADMIN_PASSWORD'] ?: generator( (('A'..'Z')+('0'..'9')+('a'..'z')).join(), 15 )
+}
+
 // for generate randome alphanumeric strings
 def generator = { String alphabet, int n ->
   new Random().with {
@@ -61,8 +65,7 @@ new DslScriptLoader(jobManagement).runScript(jobDslScriptContent)
 
 // Schdule the Jenkins/Configure job
 // Use the provided SEED_BRANCH environment vairable if specified
-def ENV_SEED_BRANCH = env['SEED_BRANCH']
-def seedRevision = ENV_SEED_BRANCH ?: "origin/master"
+def seedRevision = env['SEED_BRANCH'] ?: "origin/master"
 Jenkins.instance.getItemByFullName("Jenkins/Configure").scheduleBuild2(1, new ParametersAction([ new StringParameterValue("revision", seedRevision)]))
 
 println(Jenkins.instance.getSecurityRealm().getClass().getSimpleName())
@@ -70,7 +73,7 @@ println(Jenkins.instance.getSecurityRealm().getClass().getSimpleName())
 if(Jenkins.instance.getSecurityRealm().getClass().getSimpleName() == 'None') {
     def instance = Jenkins.getInstance()
     def setupUser = "admin"
-    def setupPass = generator( (('A'..'Z')+('0'..'9')+('a'..'z')).join(), 15 )
+    def setupPass = adminPassword()
 
     println("###################################################\nPassword:" + setupPass + "\n###################################################")
 

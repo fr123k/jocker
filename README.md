@@ -2,6 +2,12 @@
 
 # jocker (jenkins in docker)
 
+## Prerequisites
+
+### Makefile
+
+* pwgen
+
 ## Introduction
 
 Mini jenkins docker container that run jenkins as code. The jenkins is configured with
@@ -31,6 +37,17 @@ make build
 ```bash
 make jocker logs
 ```
+
+[Jenkins](http://localhost:8080/)
+
+## test
+
+```bash
+make jocker
+sleep 60 #wait until jenkins finish bootsrap and Configure job ran
+make test
+```
+
 [Jenkins](http://localhost:8080/)
 
 ## Structure
@@ -106,3 +123,6 @@ builded the first [jenkins-as-code](https://github.com/devtail/jenkins-as-code) 
 22.02.2020
 * add random password creation for user admin
 * add approveScript method signature to the scriptApproval.xml file
+
+28.02.2020
+* add ADMIN_PASSWORD environment variable to set the admin user password

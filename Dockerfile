@@ -6,9 +6,6 @@ RUN apt-get update && \
 
 USER jenkins
 
-ENV BOOTSTRAP_SHARED_LIBRARY_GIT_REPO fr123k/jocker
-ENV BOOTSTRAP_SHARED_LIBRARY_GROOVY_FILE shared-library/pipeline.groovy
-
 # Install plugins
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
@@ -21,5 +18,8 @@ COPY --chown=jenkins init.groovy.d/scriptApproval.xml /usr/share/jenkins/ref/
 
 # Disable the setup wizard 
 ENV JAVA_OPTS "-Djenkins.install.runSetupWizard=false ${JAVA_OPTS:-}"
+
+ENV BOOTSTRAP_SHARED_LIBRARY_GIT_REPO fr123k/jocker
+ENV BOOTSTRAP_SHARED_LIBRARY_GROOVY_FILE shared-library/pipeline.groovy
 
 ENV JENKINS_CLI /var/jenkins_home/war/WEB-INF/jenkins-cli.jar
