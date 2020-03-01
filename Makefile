@@ -21,12 +21,12 @@ release: build ## Push docker image to docker hub
 jocker: build ## Start the jenkins in docker container short denkins.
 	docker kill jocker || echo "Ignore failure"
 	echo "SEED_BRANCH='${SEED_BRANCH}'"
-	docker run -d -p 50000:50000 -p 8080:8080 -e ADMIN_PASSWORD="${ADMIN_PASSWORD}" -e SEED_BRANCH=${SEED_BRANCH} --name jocker --rm ${IMAGE}
+	docker run -d -p 50000:50000 -p 8080:8080 -e ADMIN_PASSWORD="${ADMIN_PASSWORD}" -e SEED_BRANCH_CONFIGURE=${SEED_BRANCH} -e SEED_BRANCH_JOBS=${SEED_BRANCH} --name jocker --rm ${IMAGE}
 
 local: build ## Start the jenkins in docker container short denkins.
 	docker kill jocker || echo "Ignore failure"
 	echo "SEED_BRANCH='${SEED_BRANCH}'"
-	docker run -d -p 50000:50000 -p 8080:8080 -e SEED_BRANCH=${SEED_BRANCH} --name jocker --rm ${IMAGE}
+	docker run -d -p 50000:50000 -p 8080:8080 -e SEED_BRANCH_CONFIGURE=${SEED_BRANCH} -e SEED_BRANCH_JOBS=${SEED_BRANCH} --name jocker --rm ${IMAGE}
 
 logs: ## Show the logs of the jocker container
 	docker logs -f $(shell docker ps -f name=jocker -q)

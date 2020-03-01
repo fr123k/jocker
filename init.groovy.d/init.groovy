@@ -99,5 +99,7 @@ if(Jenkins.instance.getSecurityRealm().getClass().getSimpleName() == 'None') {
 
 // Schdule the Jenkins/Configure job
 // Use the provided SEED_BRANCH environment vairable if specified
-def seedRevision = env['SEED_BRANCH'] ?: "origin/master"
-Jenkins.instance.getItemByFullName("Jenkins/Setup").scheduleBuild2(1, new ParametersAction([ new StringParameterValue("revision_configure", seedRevision), new StringParameterValue("revision_jobs", seedRevision)]))
+def seedRevisionConfigure = env['SEED_BRANCH_CONFIGURE'] ?: "origin/master"
+def seedRevisionJobs = env['SEED_BRANCH_JOBS'] ?: "origin/master"
+
+Jenkins.instance.getItemByFullName("Jenkins/Setup").scheduleBuild2(1, new ParametersAction([ new StringParameterValue("revision_configure", seedRevisionConfigure), new StringParameterValue("revision_jobs", seedRevisionJobs)]))
