@@ -31,12 +31,12 @@ unclassified:
   globalLibraries:
     libraries:
       - name: "shared-lib"
-      - defaultVersion: "master"
+        defaultVersion: "master"
         implicit: true
         includeInChangesets: false
         retriever:
           modernSCM:
             scm:
               git:
-                remote: "git@github.com:fr123k/jocker"
+                remote: "git@github.com:fr123k/jenkins-shared-library"
                 credentialsId: "deploy-key-shared-library"
