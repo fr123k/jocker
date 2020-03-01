@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/fr123k/jocker.svg?branch=master)](https://travis-ci.com/fr123k/jocker)
+[![dockeri.co](https://dockeri.co/image/fr123k/jocker)](https://hub.docker.com/r/fr123k/jocker)
 
 # jocker (jenkins in docker)
 
@@ -7,6 +8,9 @@
 ### Makefile
 
 * pwgen
+```bash
+apt-get install pwgen
+```
 
 ## Introduction
 
@@ -126,3 +130,5 @@ builded the first [jenkins-as-code](https://github.com/devtail/jenkins-as-code) 
 
 28.02.2020
 * add ADMIN_PASSWORD environment variable to set the admin user password
+01.03.2020
+* fix broken admin password generation in init.groovy script.
