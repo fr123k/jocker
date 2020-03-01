@@ -19,15 +19,15 @@ import hudson.model.*
 import jenkins.security.*
 import jenkins.security.apitoken.*
 
-def adminPassword = { ->
-  return System.getenv()['ADMIN_PASSWORD'] ?: generator( (('A'..'Z')+('0'..'9')+('a'..'z')).join(), 15 )
-}
-
 // for generate randome alphanumeric strings
 def generator = { String alphabet, int n ->
   new Random().with {
     (1..n).collect { alphabet[ nextInt( alphabet.length() ) ] }.join()
   }
+}
+
+def adminPassword = { ->
+  return System.getenv()['ADMIN_PASSWORD'] ?: generator( (('A'..'Z')+('0'..'9')+('a'..'z')).join(), 15 )
 }
 
 def domain = Domain.global()
