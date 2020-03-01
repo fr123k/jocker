@@ -1,6 +1,6 @@
 ---
 jenkins:
-  numExecutors: 1
+  numExecutors: 4
 
   remotingSecurity:
     enabled: true

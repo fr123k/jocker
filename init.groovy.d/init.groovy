@@ -56,17 +56,16 @@ def env = System.getenv()
 
 // Create the configuration pipeline from a jobDSL script
 def jobDslScriptContent = new File('/var/jenkins_home/dsl/bootstrap.groovy').text
-jobDslScriptContent = jobDslScriptContent.replace('{{ shared-library-git-repo }}', env['BOOTSTRAP_SHARED_LIBRARY_GIT_REPO'])
-jobDslScriptContent = jobDslScriptContent.replace('{{ shared-library-groovy-file }}', env['BOOTSTRAP_SHARED_LIBRARY_GROOVY_FILE'])
+jobDslScriptContent = jobDslScriptContent.replace('{{ seed-configure-git-repo }}', env['SEED_CONFIGURE_GIT_REPO'])
+jobDslScriptContent = jobDslScriptContent.replace('{{ seed-configure-groovy-file }}', env['SEED_CONFIGURE_GROOVY_FILE'])
+
+jobDslScriptContent = jobDslScriptContent.replace('{{ seed-job-git-repo }}', env['SEED_JOB_GIT_REPO'])
+jobDslScriptContent = jobDslScriptContent.replace('{{ seed-job-groovy-file }}', env['SEED_JOB_GROOVY_FILE'])
+
 
 def workspace = new File('.')
 def jobManagement = new JenkinsJobManagement(System.out, [:], workspace)
 new DslScriptLoader(jobManagement).runScript(jobDslScriptContent)
-
-// Schdule the Jenkins/Configure job
-// Use the provided SEED_BRANCH environment vairable if specified
-def seedRevision = env['SEED_BRANCH'] ?: "origin/master"
-Jenkins.instance.getItemByFullName("Jenkins/Configure").scheduleBuild2(1, new ParametersAction([ new StringParameterValue("revision", seedRevision)]))
 
 println(Jenkins.instance.getSecurityRealm().getClass().getSimpleName())
 // Disable Wizards
@@ -97,3 +96,8 @@ if(Jenkins.instance.getSecurityRealm().getClass().getSimpleName() == 'None') {
 
     println("SetupWizard Disabled")
 }
+
+// Schdule the Jenkins/Configure job
+// Use the provided SEED_BRANCH environment vairable if specified
+def seedRevision = env['SEED_BRANCH'] ?: "origin/master"
+Jenkins.instance.getItemByFullName("Jenkins/Setup").scheduleBuild2(1, new ParametersAction([ new StringParameterValue("revision_configure", seedRevision), new StringParameterValue("revision_jobs", seedRevision)]))

@@ -5,8 +5,8 @@ export IMAGE="${NAME}:${VERSION}"
 export LATEST="${NAME}:latest"
 export ADMIN_PASSWORD=$(shell pwgen -s 16 1)
 
+SEED_BRANCH=$(shell [ -z "${TRAVIS_PULL_REQUEST_BRANCH}" ] && echo "${TRAVIS_BRANCH}"|| echo "${TRAVIS_PULL_REQUEST_BRANCH}")
 API_TOKEN=$(shell docker logs $(shell docker ps -f name=jocker -q) | grep 'Api-Token:' | tr ':' '\n' | tail -n +2)
-
 
 pull-base:  ## Push docker image to docker hub
 	docker pull jenkins/jenkins:lts
@@ -20,8 +20,13 @@ release: build ## Push docker image to docker hub
 
 jocker: build ## Start the jenkins in docker container short denkins.
 	docker kill jocker || echo "Ignore failure"
-	echo "SEED_BRANCH='${TRAVIS_BRANCH}'"
-	docker run -d -p 50000:50000 -p 8080:8080 -e ADMIN_PASSWORD="${ADMIN_PASSWORD}" -e SEED_BRANCH=${TRAVIS_BRANCH} --name jocker --rm ${IMAGE}
+	echo "SEED_BRANCH='${SEED_BRANCH}'"
+	docker run -d -p 50000:50000 -p 8080:8080 -e ADMIN_PASSWORD="${ADMIN_PASSWORD}" -e SEED_BRANCH=${SEED_BRANCH} --name jocker --rm ${IMAGE}
+
+local: build ## Start the jenkins in docker container short denkins.
+	docker kill jocker || echo "Ignore failure"
+	echo "SEED_BRANCH='${SEED_BRANCH}'"
+	docker run -d -p 50000:50000 -p 8080:8080 -e SEED_BRANCH=${SEED_BRANCH} --name jocker --rm ${IMAGE}
 
 logs: ## Show the logs of the jocker container
 	docker logs -f $(shell docker ps -f name=jocker -q)
@@ -29,7 +34,9 @@ logs: ## Show the logs of the jocker container
 test: ## Wait 60 seconds and then check the build status of the Configure job to fail if status is not SUCCESS.
 	docker logs $(shell docker ps -f name=jocker -q)
 	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Configure/lastBuild/consoleText
-	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Configure/lastBuild/api/json | jq -r .result | grep SUCCESS
+	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Jobs/lastBuild/consoleText
+	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Setup/lastBuild/consoleText
+	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Setup/lastBuild/api/json | jq -r .result | grep SUCCESS
 
 # Absolutely awesome: http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help: ## Print this help.

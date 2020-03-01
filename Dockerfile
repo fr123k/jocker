@@ -19,7 +19,10 @@ COPY --chown=jenkins init.groovy.d/scriptApproval.xml /usr/share/jenkins/ref/
 # Disable the setup wizard 
 ENV JAVA_OPTS "-Djenkins.install.runSetupWizard=false ${JAVA_OPTS:-}"
 
-ENV BOOTSTRAP_SHARED_LIBRARY_GIT_REPO fr123k/jocker
-ENV BOOTSTRAP_SHARED_LIBRARY_GROOVY_FILE shared-library/pipeline.groovy
+ENV SEED_CONFIGURE_GIT_REPO fr123k/jocker
+ENV SEED_CONFIGURE_GROOVY_FILE shared-library/pipeline.groovy
+
+ENV SEED_JOB_GIT_REPO fr123k/jocker
+ENV SEED_JOB_GROOVY_FILE shared-library/pipeline-jobs.groovy
 
 ENV JENKINS_CLI /var/jenkins_home/war/WEB-INF/jenkins-cli.jar

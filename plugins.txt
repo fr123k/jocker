@@ -25,3 +25,6 @@ throttle-concurrents
 
 # mask password
 mask-passwords
+
+# provide build step to pipeline
+pipeline-build-step
