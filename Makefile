@@ -38,9 +38,10 @@ test: ## check the build status of the Configure job to fail if status is not SU
 	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Setup/lastBuild/consoleText
 	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Setup/lastBuild/api/json | jq -r .result | grep SUCCESS
 
-test-agent-pulumi: agent
+test-agent-pulumi:
 	docker logs $(shell docker ps -f name=agent -q)
-	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/pulumi/lastBuild/consoleText
+	./scripts/jenkins-cli.sh pulumi $(API_TOKEN)
+	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/pulumi/lastBuild/api/json | jq -r .result | grep SUCCESS
 
 agent: ## start the jocker golang pulumi agent and join the jenkins master
 	docker pull fr123k/jocker-agents-golang
