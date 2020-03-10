@@ -23,10 +23,10 @@ script:
 
 after_success:
   - make jocker
-  - sleep 90 # wait for the jenkins to finish boostraping
+  - ./scripts/jenkins-wait.sh Jenkins/job/Setup
   - make test || travis_terminate 1
   - make agent
   - sleep 10 # wait for docker jenkins agent to join
-  - make test-agent-pulumi
+  - make test-agent-pulumi || travis_terminate 1
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - if [ "$TRAVIS_PULL_REQUEST" = "false" -a "$TRAVIS_BRANCH" = "master" ]; then make release; fi

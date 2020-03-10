@@ -15,7 +15,7 @@ while [ $GREP_RETURN_CODE -eq 0 ]
 do
     ((ATTEMPS++))
     echo "Wait for jenkins job $1 to finish tries=$ATTEMPS."
-    sleep 1
+    sleep 5
     # Grep will return 0 while the build is running:
     curl -s $JOB_STATUS_URL | grep result\":null > /dev/null 
     #|| if [ "$?" == "1" ];then

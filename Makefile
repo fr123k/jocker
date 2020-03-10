@@ -8,6 +8,8 @@ export ADMIN_PASSWORD=$(shell pwgen -s 16 1)
 SEED_BRANCH=$(shell [ -z "${TRAVIS_PULL_REQUEST_BRANCH}" ] && echo "${TRAVIS_BRANCH}"|| echo "${TRAVIS_PULL_REQUEST_BRANCH}")
 API_TOKEN=$(shell docker logs $(shell docker ps -f name=jocker -q) | grep 'Api-Token:' | tr ':' '\n' | tail -n +2)
 
+DOCKER_HOST=$(shell ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
+
 pull-base:  ## Push docker image to docker hub
 	docker pull jenkins/jenkins:lts
 
@@ -33,6 +35,7 @@ logs: ## Show the logs of the jocker container
 
 test: ## check the build status of the Configure job to fail if status is not SUCCESS.
 	docker logs $(shell docker ps -f name=jocker -q)
+	./scripts/jenkins-wait.sh Jenkins/job/Setup
 	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Configure/lastBuild/consoleText
 	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Jobs/lastBuild/consoleText
 	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Setup/lastBuild/consoleText
@@ -45,7 +48,10 @@ test-agent-pulumi:
 
 agent: ## start the jocker golang pulumi agent and join the jenkins master
 	docker pull fr123k/jocker-agents-golang
-	docker run -d --name agent --rm fr123k/jocker-agents-golang -url http://host.docker.internal:8080 $(shell curl -L -s http://admin:$(API_TOKEN)@localhost:8080/computer/docker-1/slave-agent.jnlp | sed "s/.*<application-desc main-class=\"hudson.remoting.jnlp.Main\"><argument>\([a-z0-9]*\).*/\1/") docker-1
+	docker run -d --name agent --rm fr123k/jocker-agents-golang -url http://$(DOCKER_HOST):8080 $(shell curl -L -s http://admin:$(API_TOKEN)@localhost:8080/computer/docker-1/slave-agent.jnlp | sed "s/.*<application-desc main-class=\"hudson.remoting.jnlp.Main\"><argument>\([a-z0-9]*\).*/\1/") docker-1
+	sleep 10
+	docker ps
+	docker logs $(shell docker ps -f name=agent -q)
 
 agent-logs: ## Show the logs of the jocker container
 	docker logs -f $(shell docker ps -f name=agent -q)
