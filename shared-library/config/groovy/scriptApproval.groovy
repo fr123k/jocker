@@ -21,3 +21,6 @@ get().approveSignature('staticMethod org.codehaus.groovy.runtime.DefaultGroovyMe
 //used in timezone.groovy
 get().approveSignature('staticMethod org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval get')
 get().approveSignature('staticMethod java.lang.System setProperty java.lang.String java.lang.String')
+
+//the pipeline script in the jobDSL/pulumi.groovy
+get().approveScript('6d2ccc5267db0f3b500aa96a1ec53264613a1209')

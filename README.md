@@ -18,17 +18,31 @@ Mini jenkins docker container that run jenkins as code. The jenkins is configure
 a init.groovy script that does things like.
 
 * disable CSRF protection (remote calls)
-* create and run the seed job (`Jenkins/Configure`)
-* setup the user base (admin/admin user with api token)
+* (`Jenkins/Setup`): create and run the seed jobs
+    * (`Jenkins/Configure`): run configure as code and custom groovy scripts
+    * (`Jenkins/Jobs`): create all the build jobs
+* setup the user base (admin/random password user with api token)
+    * both is written to the stdout
 
-The seed job `Jenkins/Configure` is defined in 'dsl/bootstrap.groovy' and creates the
+The seed jobs are defined in 'dsl/bootstrap.groovy' and creates the
 following 3 jobs.
+
+* `Jenkins/Setup`
+
+This seed job orchestrate all the other seed jobs see below.
 
 * `Jenkins/Configure`
 
-The seed job that can create all the other jobs. For a simple setup the seed job does nothing. The test job are defined inside the seed job definition.
+This seed job that run the configure as code (casc) plugin and custom groovy script that
+disable the csrf protection, add script approvals, set timezone, ...
 
-## Build
+* `Jenkins/Jobs`
+
+This seed job load all the jobDSL files to create the build/pipeline jobs based on the provided jobDSL files.
+
+## Usage
+
+### Build
 
 To build the jenkins in docker image run the listed command below.
 
@@ -36,7 +50,7 @@ To build the jenkins in docker image run the listed command below.
 make build
 ```
 
-## Usage
+### Local Runtime
 
 ```bash
 make jocker logs
@@ -44,13 +58,28 @@ make jocker logs
 
 [Jenkins](http://localhost:8080/)
 
-## test
+### Local Test
 
 ```bash
 make jocker
 sleep 60 #wait until jenkins finish bootsrap and Configure job ran
 make test
 ```
+
+## Jenkins
+
+There are ready to use docker jenkins agents for different programming languages or tools.
+
+*At the moment there are only one docker jenkins agent for golang*
+
+### Jenkins Golang Docker Agents
+
+This docker image provide an ready to use jnlp jenkins agents with golang support.
+
+* installed golang 1.12
+* installed pulumi latest version at build time
+
+The jocker-agents-golang docker image is based on this github repo [jocker-agents](https://github.com/fr123k/jocker-agents).
 
 [Jenkins](http://localhost:8080/)
 
