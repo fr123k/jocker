@@ -36,6 +36,7 @@ logs: ## Show the logs of the jocker container
 test: ## check the build status of the Configure job to fail if status is not SUCCESS.
 	docker logs $(shell docker ps -f name=jocker -q)
 	./scripts/jenkins-wait.sh Jenkins/job/Setup
+	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/SharedLib/lastBuild/consoleText
 	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Configure/lastBuild/consoleText
 	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Jobs/lastBuild/consoleText
 	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Setup/lastBuild/consoleText

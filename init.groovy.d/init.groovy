@@ -56,6 +56,10 @@ def env = System.getenv()
 
 // Create the configuration pipeline from a jobDSL script
 def jobDslScriptContent = new File('/var/jenkins_home/dsl/bootstrap.groovy').text
+
+jobDslScriptContent = jobDslScriptContent.replace('{{ seed-shared-lib-git-repo }}', env['SEED_SHARED_LIB_GIT_REPO'])
+jobDslScriptContent = jobDslScriptContent.replace('{{ seed-shared-lib-groovy-file }}', env['SEED_SHARED_LIB_GROOVY_FILE'])
+
 jobDslScriptContent = jobDslScriptContent.replace('{{ seed-configure-git-repo }}', env['SEED_CONFIGURE_GIT_REPO'])
 jobDslScriptContent = jobDslScriptContent.replace('{{ seed-configure-groovy-file }}', env['SEED_CONFIGURE_GROOVY_FILE'])
 

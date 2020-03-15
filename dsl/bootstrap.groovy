@@ -22,6 +22,12 @@ pipelineJob("Jenkins/Setup") {
         cps {
             script("""
         node ("master") {
+            stage("SharedLib") {
+                build(job:'Jenkins/SharedLib', parameters:[
+                    string(name: 'revision', value: params.revision_configure)],
+                    propagate:true,
+                    wait:true)
+            }
             stage("Configure") {
                 build(job:'Jenkins/Configure', parameters:[
                     string(name: 'revision', value: params.revision_configure)],
@@ -36,6 +42,41 @@ pipelineJob("Jenkins/Setup") {
             }
         }
             """)
+        }
+    }
+}
+
+pipelineJob("Jenkins/SharedLib") {
+    parameters {
+        gitParam('revision') {
+            type('BRANCH_TAG')
+            sortMode('ASCENDING_SMART')
+            defaultValue('origin/master')
+        }
+    }
+
+    triggers {
+        githubPush()
+    }
+
+    logRotator {
+        numToKeep(50)
+    }
+
+    definition {
+        cpsScm {
+            scm {
+                git {
+                    remote {
+                        github("{{ seed-shared-lib-git-repo }}", "ssh")
+                        credentials("deploy-key-shared-library")
+                    }
+
+                    branch('$revision')
+                }
+            }
+            //shared-library/pipeline-shared-lib.groovy
+            scriptPath('{{ seed-shared-lib-groovy-file }}')
         }
     }
 }

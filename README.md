@@ -159,5 +159,9 @@ builded the first [jenkins-as-code](https://github.com/devtail/jenkins-as-code) 
 
 28.02.2020
 * add ADMIN_PASSWORD environment variable to set the admin user password
+
 01.03.2020
 * fix broken admin password generation in init.groovy script.
+
+15.03.2020
+* setup shared library and move [pipeline code](https://github.com/fr123k/jenkins-shared-library/tree/master/src/org/jocker/setup)  to it [fr123k/jenkins-shared-library](https://github.com/fr123k/jenkins-shared-library)
