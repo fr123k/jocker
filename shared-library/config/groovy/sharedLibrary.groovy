@@ -7,6 +7,8 @@ import org.jenkinsci.plugins.workflow.libs.SCMSourceRetriever
 
 import static org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval.get
 
+//TODO simplify this shared library setup
+
 //used in sharedLibrary.groovy
 get().approveSignature('staticMethod java.lang.System getenv')
 get().approveSignature('staticMethod jenkins.model.Jenkins getInstance')
@@ -29,13 +31,6 @@ get().approveSignature('method org.jenkinsci.plugins.workflow.libs.LibraryConfig
 get().approveSignature('method org.jenkinsci.plugins.workflow.libs.GlobalLibraries setLibraries java.util.List')
 get().approveSignature('method org.jenkinsci.plugins.workflow.libs.GlobalLibraries getLibraries')
 get().approveSignature('method org.jenkinsci.plugins.workflow.libs.LibraryConfiguration getName')
-get().approveSignature('method org.jenkinsci.plugins.workflow.libs.LibraryConfiguration getName')
-get().approveSignature('method org.jenkinsci.plugins.workflow.libs.LibraryConfiguration getName')
-get().approveSignature('method org.jenkinsci.plugins.workflow.libs.LibraryConfiguration getName')
-get().approveSignature('method org.jenkinsci.plugins.workflow.libs.LibraryConfiguration getName')
-get().approveSignature('method org.jenkinsci.plugins.workflow.libs.LibraryConfiguration getName')
-get().approveSignature('method org.jenkinsci.plugins.workflow.libs.LibraryConfiguration getName')
-
 
 List libraries = [] as ArrayList
 
@@ -43,19 +38,14 @@ def remote = System.getenv()['SHARED_LIBRARY']
 def credentialsId = "deploy-key-shared-library"
 
 if (remote != null) {
-    name = 'shared-lib'
-    defaultVersion = 'master'
 
     def scm = new GitSCMSource(remote)
-    if (credentialsId != null) {
-        scm.credentialsId = credentialsId
-    }
+    if (credentialsId != null) { scm.credentialsId = credentialsId }
 
     scm.traits = [new BranchDiscoveryTrait()]
-    def retriever = new SCMSourceRetriever(scm)
 
-    def library = new LibraryConfiguration(name, retriever)
-    library.defaultVersion = defaultVersion
+    def library = new LibraryConfiguration('shared-lib', new SCMSourceRetriever(scm))
+    library.defaultVersion = 'master'
     library.implicit = true
     library.allowVersionOverride = true
     library.includeInChangesets = false

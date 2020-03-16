@@ -42,21 +42,6 @@ test: ## check the build status of the Configure job to fail if status is not SU
 	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Setup/lastBuild/consoleText
 	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/Jenkins/job/Setup/lastBuild/api/json | jq -r .result | grep SUCCESS
 
-test-agent-pulumi:
-	docker logs $(shell docker ps -f name=agent -q)
-	./scripts/jenkins-cli.sh pulumi $(API_TOKEN)
-	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/pulumi/lastBuild/api/json | jq -r .result | grep SUCCESS
-
-agent: ## start the jocker golang pulumi agent and join the jenkins master
-	docker pull fr123k/jocker-agents-golang
-	docker run -d --name agent --rm fr123k/jocker-agents-golang -url http://$(DOCKER_HOST):8080 $(shell curl -L -s http://admin:$(API_TOKEN)@localhost:8080/computer/docker-1/slave-agent.jnlp | sed "s/.*<application-desc main-class=\"hudson.remoting.jnlp.Main\"><argument>\([a-z0-9]*\).*/\1/") docker-1
-	sleep 10
-	docker ps
-	docker logs $(shell docker ps -f name=agent -q)
-
-agent-logs: ## Show the logs of the jocker container
-	docker logs -f $(shell docker ps -f name=agent -q)
-
 # Absolutely awesome: http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help: ## Print this help.
 	@grep -E '^[a-zA-Z._-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
