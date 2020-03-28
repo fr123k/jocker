@@ -27,6 +27,10 @@ security:
   sSHD:
     port: 6666
 
+unclassified:
+  gitHubConfiguration:
+    apiRateLimitChecker: ThrottleOnOver
+
 # unclassified:
 #   globalLibraries:
 #     libraries:
