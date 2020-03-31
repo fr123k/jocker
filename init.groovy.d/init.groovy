@@ -30,6 +30,19 @@ def adminPassword = { ->
   return System.getenv()['ADMIN_PASSWORD'] ?: generator( (('A'..'Z')+('0'..'9')+('a'..'z')).join(), 15 )
 }
 
+def parseJobDslScript = { List<String> variableNames ->
+  def env = System.getenv()
+  // Create the configuration pipeline from a jobDSL script
+  def jobDslScript = new File('/var/jenkins_home/dsl/bootstrap.groovy').text
+  variableNames.each { variableName ->
+    def environmentName = variableName.toUpperCase().replaceAll("-", "_")
+    println("JobDSl Parser : replace " + variableName + " " + environmentName)
+    println("JobDSl Parser : env " + env[environmentName])
+    jobDslScript = jobDslScript.replace("{{ ${variableName} }}", env[environmentName])
+  }
+  return jobDslScript
+}
+
 def domain = Domain.global()
 def store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.SystemCredentialsProvider')[0].getStore()
 
@@ -52,24 +65,13 @@ for (File privateKeyFile : keyFiles) {
     store.addCredentials(domain, privateKey)
 }
 
-def env = System.getenv()
+def jobDslVariables = ['seed-shared-lib-git-repo', 'seed-shared-lib-groovy-file', 'seed-configure-git-repo', 'seed-configure-groovy-file', 'seed-job-git-repo', 'seed-job-groovy-file', 'job-dsl-git-repo', 'job-dsl-path']
 
-// Create the configuration pipeline from a jobDSL script
-def jobDslScriptContent = new File('/var/jenkins_home/dsl/bootstrap.groovy').text
-
-jobDslScriptContent = jobDslScriptContent.replace('{{ seed-shared-lib-git-repo }}', env['SEED_SHARED_LIB_GIT_REPO'])
-jobDslScriptContent = jobDslScriptContent.replace('{{ seed-shared-lib-groovy-file }}', env['SEED_SHARED_LIB_GROOVY_FILE'])
-
-jobDslScriptContent = jobDslScriptContent.replace('{{ seed-configure-git-repo }}', env['SEED_CONFIGURE_GIT_REPO'])
-jobDslScriptContent = jobDslScriptContent.replace('{{ seed-configure-groovy-file }}', env['SEED_CONFIGURE_GROOVY_FILE'])
-
-jobDslScriptContent = jobDslScriptContent.replace('{{ seed-job-git-repo }}', env['SEED_JOB_GIT_REPO'])
-jobDslScriptContent = jobDslScriptContent.replace('{{ seed-job-groovy-file }}', env['SEED_JOB_GROOVY_FILE'])
-
+jobDslScript = parseJobDslScript(jobDslVariables)
 
 def workspace = new File('.')
 def jobManagement = new JenkinsJobManagement(System.out, [:], workspace)
-new DslScriptLoader(jobManagement).runScript(jobDslScriptContent)
+new DslScriptLoader(jobManagement).runScript(jobDslScript)
 
 println(Jenkins.instance.getSecurityRealm().getClass().getSimpleName())
 // Disable Wizards
@@ -101,9 +103,17 @@ if(Jenkins.instance.getSecurityRealm().getClass().getSimpleName() == 'None') {
     println("SetupWizard Disabled")
 }
 
+def env = System.getenv()
 // Schdule the Jenkins/Configure job
-// Use the provided SEED_BRANCH environment vairable if specified
+// Use the provided SEED_BRANCH environment vairables if specified
 def seedRevisionConfigure = env['SEED_BRANCH_CONFIGURE'] ?: "origin/master"
 def seedRevisionJobs = env['SEED_BRANCH_JOBS'] ?: "origin/master"
 
-Jenkins.instance.getItemByFullName("Jenkins/Setup").scheduleBuild2(1, new ParametersAction([ new StringParameterValue("revision_configure", seedRevisionConfigure), new StringParameterValue("revision_jobs", seedRevisionJobs)]))
+Jenkins.instance.getItemByFullName("Jenkins/Setup")
+  .scheduleBuild2(1,
+    new ParametersAction([
+      new StringParameterValue("revision_configure", seedRevisionConfigure),
+      new StringParameterValue("revision_jobs", seedRevisionJobs)
+    ]
+  )
+)

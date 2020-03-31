@@ -1,20 +1,14 @@
 views = [
     [
-        name: "Jocker",
-        description: "Jocker Project",
+        name: "jenkins",
+        description: "The jenkins configuration jobs to bootstrap a ready to use jenkins.",
         projects: [
-            "jocker",
+            "jenkins",
         ],
     ],
 ]
 
 for(view in views) {
-    for(project in view.projects) {
-        folder("${project}") {
-            description("${project} jobs")
-        }
-    }
-
     listView("${view.name}") {
         description("${view.description}")
         filterBuildQueue()

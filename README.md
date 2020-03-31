@@ -145,8 +145,8 @@ builded the first [jenkins-as-code](https://github.com/devtail/jenkins-as-code) 
 
 ## TODO
 
-* add generated admin user api token as credentials to jenkins for further usage in other build jobs
 * pass shared library deploy key at runtime
+* support changes on the plugins.txt file at starttime
 
 ## History
 

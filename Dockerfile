@@ -23,10 +23,13 @@ ENV SEED_SHARED_LIB_GIT_REPO fr123k/jocker
 ENV SEED_SHARED_LIB_GROOVY_FILE shared-library/pipeline-shared-lib.groovy
 
 ENV SEED_CONFIGURE_GIT_REPO fr123k/jocker
-ENV SEED_CONFIGURE_GROOVY_FILE shared-library/pipeline.groovy
+ENV SEED_CONFIGURE_GROOVY_FILE shared-library/pipeline-configure.groovy
 
 ENV SEED_JOB_GIT_REPO fr123k/jocker
 ENV SEED_JOB_GROOVY_FILE shared-library/pipeline-jobs.groovy
+
+ENV JOB_DSL_GIT_REPO fr123k/jocker
+ENV JOB_DSL_PATH shared-library/jobDSL
 
 ENV SHARED_LIBRARY git@github.com:fr123k/jenkins-shared-library
 

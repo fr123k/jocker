@@ -1,18 +1,23 @@
 #!groovy
 
-folder('Jenkins') {
+folder('jenkins') {
     description('Folder containing configuration and seed jobs')
 }
 
-pipelineJob("Jenkins/Setup") {
+pipelineJob("jenkins/Setup") {
     parameters {
         stringParam('revision_configure', 'origin/master', '')
         stringParam('revision_jobs', 'origin/master', '')
     }
 
-    triggers {
-        githubPush()
+    properties {
+        pipelineTriggers {
+            triggers {
+                githubPush()
+            }
+        }
     }
+
 
     logRotator {
         numToKeep(50)
@@ -23,19 +28,19 @@ pipelineJob("Jenkins/Setup") {
             script("""
         node ("master") {
             stage("SharedLib") {
-                build(job:'Jenkins/SharedLib', parameters:[
+                build(job:'jenkins/SharedLib', parameters:[
                     string(name: 'revision', value: params.revision_configure)],
                     propagate:true,
                     wait:true)
             }
             stage("Configure") {
-                build(job:'Jenkins/Configure', parameters:[
+                build(job:'jenkins/Configure', parameters:[
                     string(name: 'revision', value: params.revision_configure)],
                     propagate:true,
                     wait:true)
             }
             stage("Jobs") {
-                build(job:'Jenkins/Jobs', parameters:[
+                build(job:'jenkins/Jobs', parameters:[
                     string(name: 'revision', value: params.revision_jobs)],
                     propagate:true,
                     wait:true)
@@ -46,7 +51,7 @@ pipelineJob("Jenkins/Setup") {
     }
 }
 
-pipelineJob("Jenkins/SharedLib") {
+pipelineJob("jenkins/SharedLib") {
     parameters {
         gitParam('revision') {
             type('BRANCH_TAG')
@@ -55,8 +60,12 @@ pipelineJob("Jenkins/SharedLib") {
         }
     }
 
-    triggers {
-        githubPush()
+    properties {
+        pipelineTriggers {
+            triggers {
+                githubPush()
+            }
+        }
     }
 
     logRotator {
@@ -81,7 +90,7 @@ pipelineJob("Jenkins/SharedLib") {
     }
 }
 
-pipelineJob("Jenkins/Configure") {
+pipelineJob("jenkins/Configure") {
     parameters {
         gitParam('revision') {
             type('BRANCH_TAG')
@@ -90,8 +99,12 @@ pipelineJob("Jenkins/Configure") {
         }
     }
 
-    triggers {
-        githubPush()
+    properties {
+        pipelineTriggers {
+            triggers {
+                githubPush()
+            }
+        }
     }
 
     logRotator {
@@ -116,17 +129,24 @@ pipelineJob("Jenkins/Configure") {
     }
 }
 
-pipelineJob("Jenkins/Jobs") {
+pipelineJob("jenkins/Jobs") {
     parameters {
         gitParam('revision') {
             type('BRANCH_TAG')
             sortMode('ASCENDING_SMART')
             defaultValue('origin/master')
         }
+        stringParam('repository', 'https://github.com/{{ job-dsl-git-repo }}', 'The full git url where the jobdsl files are located.')
+        stringParam('jobDSLRevision', 'origin/master', 'The revision of the jobDSL repository.')
+        stringParam('jobDSLPath', '{{ job-dsl-path }}', 'The path of the jobDSL files.')
     }
 
-    triggers {
-        githubPush()
+    properties {
+        pipelineTriggers {
+            triggers {
+                githubPush()
+            }
+        }
     }
 
     logRotator {
