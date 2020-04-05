@@ -1,3 +1,11 @@
+# job priority sorter
+job-restrictions
+
+    #PrioritySorter
+
+# pipeline job
+workflow-job
+
 # plugins for pipeline setup
 cloudbees-folder
 job-dsl

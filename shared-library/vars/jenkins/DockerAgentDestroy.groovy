@@ -1,5 +1,5 @@
 
-node('master') {
+node('docker') {
 
     stage('Checkout') {
         cleanWs()
@@ -9,7 +9,9 @@ node('master') {
     stage('Destroy Agent') {
         wrap([$class: 'MaskPasswordsBuildWrapper', varPasswordPairs: []]) {
             try {
-                sh("docker kill ${params.agentID}")
+                sh("docker ps")
+                sh("docker stop ${params.node}")
+                sh("docker ps")
             } catch(Exception e) {
                 echo "${e}"
                 currentBuild.result = 'FAILURE'

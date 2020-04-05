@@ -8,6 +8,10 @@ export ADMIN_PASSWORD=$(shell pwgen -s 16 1)
 SEED_BRANCH=$(shell [ -z "${TRAVIS_PULL_REQUEST_BRANCH}" ] && echo "${TRAVIS_BRANCH}"|| echo "${TRAVIS_PULL_REQUEST_BRANCH}")
 API_TOKEN=$(shell docker logs $(shell docker ps -f name=jocker -q) | grep 'Api-Token:' | tr ':' '\n' | tail -n +2)
 
+ENV_SEED_BRANCH_CONFIGURE=$(shell [ -z "${SEED_BRANCH}" ] && echo ""|| echo "-e SEED_BRANCH_CONFIGURE=${SEED_BRANCH}")
+
+ENV_SEED_BRANCH_JOBS=$(shell [ -z "${SEED_BRANCH}" ] && echo ""|| echo "-e SEED_BRANCH_JOBS=${SEED_BRANCH}")
+
 DOCKER_HOST=$(shell ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
 ENV_FILE=$(shell [ -f "./jocker.env" ] && echo "--env-file ./jocker.env"|| echo "")
 
@@ -21,17 +25,17 @@ release: build ## Push docker image to docker hub
 	docker tag ${IMAGE} ${LATEST}
 	docker push ${NAME}
 
-start: ## Start the jenkins in docker container short denkins.
+start: ## Start the jenkins in docker container short jocker.
 	docker kill jocker || echo "Ignore failure"
 	echo "SEED_BRANCH='${SEED_BRANCH}'"
-	docker run -d -p 50000:50000 -p 8080:8080 -e ADMIN_PASSWORD="${ADMIN_PASSWORD}" -e SEED_BRANCH_CONFIGURE=${SEED_BRANCH} -e SEED_BRANCH_JOBS=${SEED_BRANCH} ${ENV_FILE} --name jocker --rm ${IMAGE}
+	docker run -d --memory 3g -p 50000:50000 -p 8080:8080 -e ADMIN_PASSWORD="${ADMIN_PASSWORD}" ${ENV_SEED_BRANCH_JOBS} ${ENV_SEED_BRANCH_JOBS} ${ENV_FILE} --name jocker --rm ${IMAGE}
 
-jocker: build start ## Start the jenkins in docker container short denkins.
+jocker: build start ## Start the jenkins in docker container short jocker.
 
-local: build ## Start the jenkins in docker container short denkins.
+local: build ## Start the jenkins in docker container short jocker.
 	docker kill jocker || echo "Ignore failure"
 	echo "SEED_BRANCH='${SEED_BRANCH}'"
-	docker run -d -p 50000:50000 -p 8080:8080 -e SEED_BRANCH_CONFIGURE=${SEED_BRANCH} -e SEED_BRANCH_JOBS=${SEED_BRANCH} ${ENV_FILE} --name jocker --rm ${IMAGE}
+	docker run -d -p 50000:50000 -p 8080:8080 ${ENV_SEED_BRANCH_JOBS} ${ENV_SEED_BRANCH_JOBS} ${ENV_FILE} --name jocker --rm ${IMAGE}
 
 logs: ## Show the logs of the jocker container
 	docker logs -f $(shell docker ps -f name=jocker -q)

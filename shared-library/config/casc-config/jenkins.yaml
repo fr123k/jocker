@@ -1,6 +1,6 @@
 ---
 jenkins:
-  numExecutors: 4
+  numExecutors: 6
 
   remotingSecurity:
     enabled: true
@@ -30,6 +30,35 @@ security:
 unclassified:
   gitHubConfiguration:
     apiRateLimitChecker: ThrottleOnOver
+  jobNodesOnDemandConfiguration:
+    enabled: true
+    revision: "fr123k/docker_agents_on_demand"
+    gitUrl: "https://github.com/fr123k/jocker-agents"
+    gitRevision: "fr/add_maven_docker_build_agent"
+    excludeLabels: docker
+    agentProvisionJob: "jenkins/DockerAgentBootstrap"
+    agentDecomissionJob: "jenkins/DockerAgentDestroy"
+    agentImage: "fr123k/jocker-agents-{label}"
+    agentWorkDir: "/home/jenkins"
+  globalDefaultFlowDurabilityLevel:
+    durabilityHint: "PERFORMANCE_OPTIMIZED"
+  prioritySorterConfiguration:
+    strategy:
+      absoluteStrategy:
+        defaultPriority:3
+        numberOfPriorities:5
+  priorityConfiguration:
+    jobGroups:
+      - id: 0
+        priority: 1
+        description: "Jenkins"
+        runExclusive: false
+        usePriorityStrategies: false
+        # jobGroupStrategy:
+        #   folderBased:
+        #     folderName: "Jenkins"
+        # useJobFilter: false
+        # jobPattern: ".*"
 
 # unclassified:
 #   globalLibraries:

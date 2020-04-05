@@ -5,16 +5,23 @@ node('docker') {
         checkout scm
     }
 
-    stage('Bootstrap Agent') {
+    stage('Build Agent') {
         wrap([$class: 'MaskPasswordsBuildWrapper', varPasswordPairs: []]) {
             try {
                 secret = jenkins.model.Jenkins.instance.getNode(params.node)?.computer?.jnlpMac.trim()
                 sh("docker version")
-                sh(
+                sh("git clone ${params.gitUrl} work")
+                //TODO make this configurable
+                dir("work/agents/${params.label}"){
+                    sh "pwd"
+                    sh("git checkout ${params.gitRevision}")
+                    sh("make VERSION=latest build")
+                    sh(
                     """
                     docker run -d --name ${params.node} --rm ${params.image} -noreconnect -url http://host.docker.internal:8080 ${secret} ${params.node}
                     """
-                )
+                    )
+                }
             } catch(Exception e) {
                 echo "${e}"
                 currentBuild.result = 'FAILURE'

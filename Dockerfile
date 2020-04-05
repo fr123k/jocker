@@ -16,8 +16,15 @@ COPY --chown=jenkins dsl /usr/share/jenkins/ref/dsl
 COPY --chown=jenkins deployKeys /usr/share/jenkins/ref/deployKeys
 COPY --chown=jenkins init.groovy.d/scriptApproval.xml /usr/share/jenkins/ref/
 
+# Add custom plugin agents-ondemand
+COPY --chown=jenkins plugins/labels-ondemand.jpi /usr/share/jenkins/ref/plugins/
+RUN touch /usr/share/jenkins/ref/plugins/labels-ondemand.jpi.pinned
+
+COPY --chown=jenkins plugins/PrioritySorter.jpi /usr/share/jenkins/ref/plugins/
+RUN touch /usr/share/jenkins/ref/plugins/PrioritySorter.pinned
+
 # Disable the setup wizard 
-ENV JAVA_OPTS "-Djenkins.install.runSetupWizard=false ${JAVA_OPTS:-}"
+ENV JAVA_OPTS "-Xmx2g -XX:MaxPermSize=512m -Xmx256m -Xms256m -XX:+UseG1GC -Djenkins.install.runSetupWizard=false -Dhudson.model.ParametersAction.keepUndefinedParameters=false ${JAVA_OPTS:-}"
 
 ENV SEED_SHARED_LIB_GIT_REPO fr123k/jocker
 ENV SEED_SHARED_LIB_GROOVY_FILE shared-library/pipeline-shared-lib.groovy

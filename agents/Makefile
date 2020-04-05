@@ -1,16 +1,11 @@
+API_TOKEN=$(shell docker logs $(shell docker ps -f name=jocker -q) | grep 'Api-Token:' | tr ':' '\n' | tail -n +2)
 
-VERSION=$(shell docker image inspect jenkins/jenkins:lts | jq -r '.[0].ContainerConfig.Env[] | select(contains("JENKINS_VERSION"))' | cut -d'=' -f 2)
-export IMAGE="fr123k/jocker-agent:${VERSION}"
+agent:
+	curl http://admin:$(API_TOKEN)@localhost:8080/computer/docker-1/slave-agent.jnlp
+	curl -o agent.jar http://admin:$(API_TOKEN)@localhost:8080/jnlpJars/agent.jar 
+	java -jar agent.jar -jnlpUrl http://localhost:8080/computer/docker-1/slave-agent.jnlp -noreconnect -secret $(shell curl -L -s http://admin:$(API_TOKEN)@localhost:8080/computer/docker-1/slave-agent.jnlp | sed "s/.*<application-desc main-class=\"hudson.remoting.jnlp.Main\"><argument>\([a-z0-9]*\).*/\1/") -workDir "$(PWD)/remote"
 
-build: ## Build the jenkins in docker image.
-	docker build -t $(IMAGE) -f Dockerfile .
-
-release: build ## Push docker image to docker hub
-	docker push $(IMAGE)
-
-test: build 
-	docker run -e AGENT_URL="http://host.docker.internal:8080/jnlpJars/agent.jar" $(IMAGE)
-
-# Absolutely awesome: http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
-help: ## Print this help.
-	@grep -E '^[a-zA-Z._-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+agent-2:
+	curl http://admin:$(API_TOKEN)@localhost:8080/computer/docker-2/slave-agent.jnlp
+	curl -o agent.jar http://admin:$(API_TOKEN)@localhost:8080/jnlpJars/agent.jar 
+	java -jar agent.jar -jnlpUrl http://localhost:8080/computer/docker-2/slave-agent.jnlp -noreconnect -secret $(shell curl -L -s http://admin:$(API_TOKEN)@localhost:8080/computer/docker-2/slave-agent.jnlp | sed "s/.*<application-desc main-class=\"hudson.remoting.jnlp.Main\"><argument>\([a-z0-9]*\).*/\1/") -workDir "$(PWD)/remote"

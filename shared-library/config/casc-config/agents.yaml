@@ -1,0 +1,62 @@
+---
+jenkins:
+  nodes:
+    ########
+    # Deploy
+    ########
+    - permanent:
+        name: "docker-1"
+        labelString: "docker"
+        nodeName: "docker-1"
+        remoteFS: "/Users/franki/private/github/jocker-agents/docker-1"
+        numExecutors: 6
+        launcher:
+          jnlp:
+            workDirSettings:
+              failIfWorkDirIsMissing: false
+    - permanent:
+        name: "docker-2"
+        labelString: "docker"
+        nodeName: "docker-2"
+        remoteFS: "/Users/franki/private/github/jocker-agents/docker-2"
+        numExecutors: 6
+        launcher:
+          jnlp:
+            workDirSettings:
+              failIfWorkDirIsMissing: false
+    # - permanent:
+    #     labelString: "golang"
+    #     name: "golang-1"
+    #     nodeName: "golang-1"
+    #     numExecutors: 2
+    #     remoteFS: "/home/jenkins"
+    #     launcher:
+    #       setupSlaveLauncher:
+    #         startScript: "java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -auth admin:${ADMIN_PASSWORD} -s http://localhost:8080 build jenkins/DockerAgentBootstrap -p revision=origin/fr123k/docker_agents_on_demand -p agentID=golang-1 -p image=fr123k/jocker-agents-golang"
+    #         stopScript: "java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -auth admin:${ADMIN_PASSWORD} -s http://localhost:8080 build jenkins/DockerAgentDestroy -p revision=origin/fr123k/docker_agents_on_demand -p agentID=golang-1 -p image=fr123k/jocker-agents-golang"
+    #         launcher:
+    #           jnlp:
+    #             workDirSettings:
+    #               failIfWorkDirIsMissing: false
+    #     retentionStrategy:
+    #       demand:
+    #         idleDelay: 1000
+    #         inDemandDelay: 0
+    # - permanent:
+    #     labelString: "build"
+    #     name: "golang-2"
+    #     nodeName: "golang-2"
+    #     numExecutors: 2
+    #     remoteFS: "/home/jenkins"
+    #     launcher:
+    #       setupSlaveLauncher:
+    #         startScript: "java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -auth admin:${ADMIN_PASSWORD} -s http://localhost:8080 build jenkins/DockerAgentBuild -p revision=origin/fr123k/docker_agents_on_demand -p agentID=golang-1 -p image=fr123k/jocker-agents-golang -p git=https://github.com/fr123k/jocker-agents -p label=golang"
+    #         stopScript: "java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -auth admin:${ADMIN_PASSWORD} -s http://localhost:8080 build jenkins/DockerAgentDestroy -p revision=origin/fr123k/docker_agents_on_demand -p agentID=golang-1 -p image=fr123k/jocker-agents-golang"
+    #         launcher:
+    #           jnlp:
+    #             workDirSettings:
+    #               failIfWorkDirIsMissing: false
+    #     retentionStrategy:
+    #       demand:
+    #         idleDelay: 1000
+    #         inDemandDelay: 0

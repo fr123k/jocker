@@ -139,6 +139,7 @@ pipelineJob("jenkins/Jobs") {
         stringParam('repository', 'https://github.com/{{ job-dsl-git-repo }}', 'The full git url where the jobdsl files are located.')
         stringParam('jobDSLRevision', 'origin/master', 'The revision of the jobDSL repository.')
         stringParam('jobDSLPath', '{{ job-dsl-path }}', 'The path of the jobDSL files.')
+        stringParam('removedJobAction', 'DELETE', 'Defines how to the jobDSL defined jobs with the existing once the=y are not part og the defined jobDSL. (IGNORE, DISABLE, DELETE)')
     }
 
     properties {
