@@ -15,11 +15,13 @@ COPY --chown=jenkins init.groovy.d /usr/share/jenkins/ref/init.groovy.d
 COPY --chown=jenkins dsl /usr/share/jenkins/ref/dsl
 COPY --chown=jenkins deployKeys /usr/share/jenkins/ref/deployKeys
 COPY --chown=jenkins init.groovy.d/scriptApproval.xml /usr/share/jenkins/ref/
+# COPY --chown=jenkins config /usr/share/jenkins/ref/
+
+RUN ls -lha /usr/share/jenkins/ref/
 
 # Add custom plugin agents-ondemand
 COPY --chown=jenkins plugins/labels-ondemand.jpi /usr/share/jenkins/ref/plugins/
 RUN touch /usr/share/jenkins/ref/plugins/labels-ondemand.jpi.pinned
-
 COPY --chown=jenkins plugins/PrioritySorter.jpi /usr/share/jenkins/ref/plugins/
 RUN touch /usr/share/jenkins/ref/plugins/PrioritySorter.pinned
 

@@ -52,3 +52,6 @@ test: ## check the build status of the Configure job to fail if status is not SU
 # Absolutely awesome: http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help: ## Print this help.
 	@grep -E '^[a-zA-Z._-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+git-server:
+	docker run -p 22:22 -it -v $(PWD)/../:/git-server -e REPOSITORY=fr123k --name github --rm github-server-docker

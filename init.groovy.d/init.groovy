@@ -117,3 +117,15 @@ Jenkins.instance.getItemByFullName("Jenkins/Setup")
     ]
   )
 )
+
+def useLocalGit = env['LOCAL_GIT'] ?: false
+if (useLocalGit) {
+  def file = new File('/var/jenkins_home/.gitconfig')
+  file.text = '''
+[url "ssh://git@local.github.com/"]
+	insteadOf = https://github.com/
+
+[url "ssh://git@local.github.com/"]
+	insteadOf = git@github.com:
+'''
+}

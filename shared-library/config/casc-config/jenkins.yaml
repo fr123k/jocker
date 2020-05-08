@@ -43,22 +43,37 @@ unclassified:
   globalDefaultFlowDurabilityLevel:
     durabilityHint: "PERFORMANCE_OPTIMIZED"
   prioritySorterConfiguration:
-    strategy:
+    strategy: 
       absoluteStrategy:
-        defaultPriority:3
-        numberOfPriorities:5
+        defaultPriority: 3
+        numberOfPriorities: 5
   priorityConfiguration:
     jobGroups:
       - id: 0
         priority: 1
         description: "Jenkins"
         runExclusive: false
+        usePriorityStrategies: true
+        priorityStrategies:
+          - userIdCauseStrategy:
+              priority: 1
+          - upstreamCauseStrategy
+          - userIdCauseStrategy:
+              priority: 3
+          - cLICauseStrategy:
+              priority: 4
+          - jobPropertyStrategy
+          - buildParameterStrategy:
+              parameterName: priority
+        jobGroupStrategy:
+          folderBased:
+            folderName: "Jenkins"
+      - id: 0
+        priority: 2
+        description: "Else"
+        runExclusive: false
         usePriorityStrategies: false
-        # jobGroupStrategy:
-        #   folderBased:
-        #     folderName: "Jenkins"
-        # useJobFilter: false
-        # jobPattern: ".*"
+        jobGroupStrategy: allJobs
 
 # unclassified:
 #   globalLibraries:

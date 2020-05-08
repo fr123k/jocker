@@ -1,7 +1,7 @@
 # job priority sorter
 job-restrictions
-
-    #PrioritySorter
+#PrioritySorter
+matrix-project
 
 # pipeline job
 workflow-job
