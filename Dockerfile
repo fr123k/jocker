@@ -20,8 +20,8 @@ COPY --chown=jenkins init.groovy.d/scriptApproval.xml /usr/share/jenkins/ref/
 RUN ls -lha /usr/share/jenkins/ref/
 
 # Add custom plugin agents-ondemand
-COPY --chown=jenkins plugins/labels-ondemand.jpi /usr/share/jenkins/ref/plugins/
-RUN touch /usr/share/jenkins/ref/plugins/labels-ondemand.jpi.pinned
+COPY --chown=jenkins plugins/job-agents-on-demand.jpi /usr/share/jenkins/ref/plugins/
+RUN touch /usr/share/jenkins/ref/plugins/job-agents-on-demand.jpi.pinned
 COPY --chown=jenkins plugins/PrioritySorter.jpi /usr/share/jenkins/ref/plugins/
 RUN touch /usr/share/jenkins/ref/plugins/PrioritySorter.pinned
 
