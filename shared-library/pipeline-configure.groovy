@@ -12,7 +12,7 @@ node('master') {
                 .approve('method jenkins.model.Jenkins getNode java.lang.String')
                 .approve('method hudson.model.Slave getComputer')
                 .approve('method hudson.slaves.SlaveComputer getJnlpMac')
-                .approve('staticMethod org.codehaus.groovy.runtime.EncodingGroovyMethods decodeBase64')
+                .approve('staticMethod org.codehaus.groovy.runtime.EncodingGroovyMethods decodeBase64 java.lang.String')
                 .approve('new java.lang.String byte[]')
     }
 }

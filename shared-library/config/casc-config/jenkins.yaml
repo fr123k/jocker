@@ -32,9 +32,9 @@ unclassified:
     apiRateLimitChecker: ThrottleOnOver
   jobNodesOnDemandConfiguration:
     enabled: true
-    revision: "fr123k/docker_agents_on_demand"
+    revision: "origin/master"
     gitUrl: "https://github.com/fr123k/jocker-agents"
-    gitRevision: "fr/add_maven_docker_build_agent"
+    gitRevision: "origin/master"
     excludeLabels: docker
     agentProvisionJob: "jenkins/DockerAgentBootstrap"
     agentDecomissionJob: "jenkins/DockerAgentDestroy"
