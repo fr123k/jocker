@@ -12,6 +12,7 @@ node('docker') {
                 sh("docker version")
                 sh(
                     """
+                    docker pull ${params.image}
                     docker run -d --name ${params.node} --memory-swap=-1 --rm ${params.image} -noreconnect -url ${env.JENKINS_MASTER} ${secret} ${params.node}
                     """
                 )
