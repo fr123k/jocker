@@ -43,3 +43,5 @@ ENV JOB_DSL_PATH shared-library/jobDSL
 ENV SHARED_LIBRARY git@github.com:fr123k/jenkins-shared-library
 
 ENV JENKINS_CLI /var/jenkins_home/war/WEB-INF/jenkins-cli.jar
+
+ENV JENKINS_MASTER http://host.docker.internal:8080

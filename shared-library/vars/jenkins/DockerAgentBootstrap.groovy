@@ -12,7 +12,7 @@ node('docker') {
                 sh("docker version")
                 sh(
                     """
-                    docker run -d --name ${params.node} --rm ${params.image} -noreconnect -url http://host.docker.internal:8080 ${secret} ${params.node}
+                    docker run -d --name ${params.node} --rm ${params.image} -noreconnect -url ${env.JENKINS_MASTER} ${secret} ${params.node}
                     """
                 )
             } catch(Exception e) {
