@@ -14,5 +14,7 @@ node('master') {
                 .approve('method hudson.slaves.SlaveComputer getJnlpMac')
                 .approve('staticMethod org.codehaus.groovy.runtime.EncodingGroovyMethods decodeBase64 java.lang.String')
                 .approve('new java.lang.String byte[]')
+                .approve('new groovy.json.JsonSlurperClassic')
+                .approve('method groovy.json.JsonSlurperClassic parseText java.lang.String')
     }
 }

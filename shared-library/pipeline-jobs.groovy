@@ -1,4 +1,16 @@
-import groovy.json.JsonSlurper
+import groovy.json.JsonSlurperClassic
+
+@NonCPS
+def parseJobList(def json) {
+    def jobsListB64 = json.replaceAll("\"", "")
+    byte[] decoded = jobsListB64.decodeBase64()
+    def json_str = new String(decoded)
+
+    def jsonSlurper = new JsonSlurperClassic()
+    jobsList = jsonSlurper.parseText(json_str)
+    println(jobsList)
+    return jobsList
+}
 
 node('master') {
     stage('Checkout') {
@@ -13,13 +25,7 @@ node('master') {
         println env.JOBS_LIST
 
         if (env.JOBS_LIST) {
-            def jobsListB64 = env.JOBS_LIST.replaceAll("\"", "")
-            byte[] decoded = jobsListB64.decodeBase64()
-            def json_str = new String(decoded)
-
-            def jsonSlurper = new JsonSlurper()
-            jobsList = jsonSlurper.parseText(json_str)
-            println(jobsList)
+            def jobsList = parseJobList(env.JOBS_LIST)
 
             jobsList.jobs.each{ job ->
                 createJobs("${job.repository}", "${job.jobDSLRevision}", "${job.jobDSLPath}", "${job.removedJobAction}")
