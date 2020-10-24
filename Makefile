@@ -32,6 +32,10 @@ start: ## Start the jenkins in docker container short jocker.
 
 jocker: build start ## Start the jenkins in docker container short jocker.
 
+full: local
+	sleep 90
+	make -C agents agent
+
 local: build ## Start the jenkins in docker container short jocker.
 	docker kill jocker || echo "Ignore failure"
 	echo "SEED_BRANCH='${SEED_BRANCH}'"
@@ -42,6 +46,7 @@ logs: ## Show the logs of the jocker container
 
 test: ## check the build status of the Configure job to fail if status is not SUCCESS.
 	docker logs $(shell docker ps -f name=jocker -q)
+	echo "$(API_TOKEN)"
 	./scripts/jenkins-wait.sh jenkins/job/Setup
 	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/jenkins/job/SharedLib/lastBuild/consoleText
 	@curl -s http://admin:$(API_TOKEN)@localhost:8080/job/jenkins/job/Configure/lastBuild/consoleText
@@ -54,4 +59,4 @@ help: ## Print this help.
 	@grep -E '^[a-zA-Z._-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 git-server:
-	docker run -p 22:22 -it -v $(PWD)/../:/git-server -e REPOSITORY=fr123k --name github --rm github-server-docker
+	docker run -p 22:22 -it -v $(PWD)/../:/git-server -e REPOSITORY=fr123k --name github --rm fr123k/git-server-docker
