@@ -41,7 +41,8 @@ pipelineJob("jenkins/Setup") {
             }
             stage("Jobs") {
                 build(job:'jenkins/Jobs', parameters:[
-                    string(name: 'revision', value: params.revision_jobs)],
+                    string(name: 'revision', value: params.revision_jobs),
+                    string(name: 'jobDSLRevision', value: params.revision_jobs)],
                     propagate:true,
                     wait:true)
             }
