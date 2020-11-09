@@ -19,8 +19,8 @@ node('master') {
     }
 
     stage('Seed') {
-        echo "create Jobs based repository: ${repository}, revision: ${jobDSLRevision}, jobDSLPath: ${jobDSLPath}, removedJobAction ${removedJobAction}"
-        createJobs("${repository}", "${jobDSLRevision}", "${jobDSLPath}", "${removedJobAction}")
+        echo "create Jobs based repository: ${repository}, revision: ${jobDSLRevision}, jobDSLCredentialsId: ${jobDSLCredentialsId}, jobDSLPath: ${jobDSLPath}, removedJobAction ${removedJobAction}"
+        createJobs("${repository}", "${jobDSLRevision}", "${jobDSLCredentialsId}", "${jobDSLPath}", "${removedJobAction}")
 
         println env.JOBS_LIST
 
@@ -28,7 +28,7 @@ node('master') {
             def jobsList = parseJobList(env.JOBS_LIST)
 
             jobsList.jobs.each{ job ->
-                createJobs("${job.repository}", "${job.jobDSLRevision}", "${job.jobDSLPath}", "${job.removedJobAction}")
+                createJobs("${job.repository}", "${job.jobDSLRevision}", "${job.jobDSLCredentialsId}", "${job.jobDSLPath}", "${job.removedJobAction}")
             }
         }
     }
