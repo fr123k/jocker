@@ -53,14 +53,15 @@ proc.waitForProcessOutput(System.out, System.err);
 def keyFiles = new File("/var/jenkins_home/deployKeys/").listFiles();
 for (File privateKeyFile : keyFiles) {
     def keyFileContents = privateKeyFile.text
+    def (username, keyName)  = privateKeyFile.getName().split("\\.")
     System.out.println(privateKeyFile.getName())
     def privateKey = new BasicSSHUserPrivateKey(
       CredentialsScope.GLOBAL,
-      privateKeyFile.getName(),
-      "root",
+      keyName,
+      username,
       new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(keyFileContents),
       "",
-      "SSH key for " + privateKeyFile.getName()
+      "SSH key for " + keyName
     )
     store.addCredentials(domain, privateKey)
 }
