@@ -1,14 +1,17 @@
 FROM jenkins/jenkins:lts
 
+ENV JENKINS_PLUGIN_CLI_VERSION=2.1.1
+
 USER root
 RUN apt-get update && \
-    apt-get install -y rsync docker
+    apt-get install -y rsync
 
 USER jenkins
 
 # Install plugins
+RUN curl -sL https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/${JENKINS_PLUGIN_CLI_VERSION}/jenkins-plugin-manager-${JENKINS_PLUGIN_CLI_VERSION}.jar -o /usr/share/jenkins/ref/jenkins-plugin-manager.jar
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
-RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
+RUN java -jar /usr/share/jenkins/ref/jenkins-plugin-manager.jar -f /usr/share/jenkins/ref/plugins.txt
 
 # Add minimum jenkins setup
 COPY --chown=jenkins init.groovy.d /usr/share/jenkins/ref/init.groovy.d
