@@ -37,3 +37,36 @@ mask-passwords
 
 # provide build step to pipeline
 pipeline-build-step
+
+# add active choice build parameter
+uno-choice
+
+#all plugin dependencies to fetch the latest versions
+antisamy-markup-formatter
+bouncycastle-api
+checks-api
+credentials
+credentials-binding
+display-url-api
+durable-task
+external-monitor-job
+git-server
+github-api
+jackson2-api
+jdk-tool
+jquery
+junit
+pam-auth
+pipeline-input-step
+pipeline-stage-step
+plain-credentials
+resource-disposer
+snakeyaml-api
+token-macro
+trilead-api
+windows-slaves
+workflow-cps
+workflow-cps-global-lib
+workflow-durable-task-step
+workflow-multibranch
+workflow-support

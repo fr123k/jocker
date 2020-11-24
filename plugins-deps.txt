@@ -1,0 +1,4 @@
+# version pinned for jenkins 2.49
+ldap:1.26
+branch-api:2.6.2
+workflow-basic-steps:2.22

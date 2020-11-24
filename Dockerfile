@@ -10,8 +10,12 @@ USER jenkins
 
 # Install plugins
 RUN curl -sL https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/${JENKINS_PLUGIN_CLI_VERSION}/jenkins-plugin-manager-${JENKINS_PLUGIN_CLI_VERSION}.jar -o /usr/share/jenkins/ref/jenkins-plugin-manager.jar
-COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
-RUN java -jar /usr/share/jenkins/ref/jenkins-plugin-manager.jar -f /usr/share/jenkins/ref/plugins.txt
+COPY --chown=jenkins plugins.txt /usr/share/jenkins/ref/plugins.txt
+COPY --chown=jenkins plugins-deps.txt /usr/share/jenkins/ref/plugins-deps.txt
+RUN java -jar /usr/share/jenkins/ref/jenkins-plugin-manager.jar --available-updates --output txt -f /usr/share/jenkins/ref/plugins.txt > /usr/share/jenkins/ref/plugins-latest.txt && \
+    cat /usr/share/jenkins/ref/plugins-deps.txt >> /usr/share/jenkins/ref/plugins-latest.txt && \
+    cat /usr/share/jenkins/ref/plugins-latest.txt
+RUN java -jar /usr/share/jenkins/ref/jenkins-plugin-manager.jar --latest-specified -f /usr/share/jenkins/ref/plugins-latest.txt
 
 # Add minimum jenkins setup
 COPY --chown=jenkins init.groovy.d /usr/share/jenkins/ref/init.groovy.d
