@@ -62,6 +62,8 @@ pipeline-stage-step
 plain-credentials
 resource-disposer
 snakeyaml-api
+#the PrioritySorter plugin 4.0.0 needs structs 1.22
+#structs
 token-macro
 trilead-api
 windows-slaves

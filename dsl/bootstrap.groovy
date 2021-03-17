@@ -137,7 +137,7 @@ pipelineJob("jenkins/Jobs") {
             sortMode('ASCENDING_SMART')
             defaultValue('origin/master')
         }
-        stringParam('repository', 'https://github.com/{{ job-dsl-git-repo }}', 'The full git url where the jobdsl files are located.')
+        stringParam('repository', 'git@github.com:{{ job-dsl-git-repo }}', 'The full git url where the jobdsl files are located.')
         stringParam('jobDSLRevision', 'master', 'The revision of the jobDSL repository.')
         stringParam('jobDSLCredentialsId', 'deploy-key-shared-library', 'The id of the credentials from jenkoins to perform git checkout with for the specified repository.')
         stringParam('jobDSLPath', '{{ job-dsl-path }}', 'The path of the jobDSL files.')

@@ -66,6 +66,36 @@ sleep 60 #wait until jenkins finish bootsrap and Configure job ran
 make test
 ```
 
+### Local Git Repository
+
+The jenkins docker container can be configured to use local git repositories.
+The argument `LOCAL_GIT=true` set the following configuration for the `.gitconfig` inside the jenkins container.
+
+This configuration is part of the [init.groovy](jocker/../init.groovy.d/init.groovy) script.
+```
+[url "ssh://git@local.github.com/"]
+       insteadOf = https://github.com/
+
+[url "ssh://git@local.github.com/"]
+       insteadOf = git@github.com:
+```
+
+This `local.github.com` domain can then be used to point the jenkins to a local git server like [git-server-docker](https://github.com/fr123k/git-server-docker) by just add the following entry
+to your `/etc/hosts` file.
+
+```
+192.168.65.2 local.github.com
+```
+
+For a full tutorial check out the `git-server-docker` [README](https://github.com/fr123k/git-server-docker) documentation.
+
+The following command start the jenkins container and instead of using the `github.com` every github repository
+in jenkins is resolved to `local.github.com`.
+```
+echo LOCAL_GIT=true > jocker.env
+make jocker logs
+```
+
 ## Jenkins
 
 There are ready to use docker jenkins agents for different programming languages or tools.
