@@ -1,5 +1,5 @@
 
-VERSION=$(shell docker image inspect jenkins/jenkins:lts | jq -r '.[0].ContainerConfig.Env[] | select(contains("JENKINS_VERSION"))' | cut -d'=' -f 2)
+VERSION=$(shell docker image inspect jenkins/jenkins:lts | jq -r '.[0].Config.Env[] | select(contains("JENKINS_VERSION"))' | cut -d'=' -f 2)
 export NAME=fr123k/jocker
 export IMAGE="${NAME}:${VERSION}"
 export LATEST="${NAME}:latest"
