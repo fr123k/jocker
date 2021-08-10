@@ -119,7 +119,7 @@ Jenkins.instance.getItemByFullName("Jenkins/Setup")
   )
 )
 
-def useLocalGit = env['LOCAL_GIT'] ?: false
+def useLocalGit = env['LOCAL_GIT'].toBoolean() ?: false
 if (useLocalGit) {
   def file = new File('/var/jenkins_home/.gitconfig')
   file.text = '''
