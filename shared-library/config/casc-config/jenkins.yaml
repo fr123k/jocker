@@ -1,6 +1,7 @@
 ---
 jenkins:
   numExecutors: 6
+  labelString: master
 
   remotingSecurity:
     enabled: true
