@@ -31,6 +31,9 @@ get().approveSignature('method org.jenkinsci.plugins.workflow.libs.LibraryConfig
 get().approveSignature('method org.jenkinsci.plugins.workflow.libs.GlobalLibraries setLibraries java.util.List')
 get().approveSignature('method org.jenkinsci.plugins.workflow.libs.GlobalLibraries getLibraries')
 get().approveSignature('method org.jenkinsci.plugins.workflow.libs.LibraryConfiguration getName')
+//used in https://github.com/fr123k/jenkins-jobs/ to read jobs defintion from yaml file
+get().approveSignature('new org.yaml.snakeyaml.Yaml')
+get().approveSignature('method org.yaml.snakeyaml.Yaml load java.lang.String')
 
 List libraries = [] as ArrayList
 
