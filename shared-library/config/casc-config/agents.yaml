@@ -1,0 +1,16 @@
+---
+jenkins:
+  nodes:
+    ########
+    # Docker Agent for Docker Daemon
+    ########
+    - permanent:
+        name: "docker-1"
+        labelString: "docker"
+        nodeName: "docker-1"
+        remoteFS: "docker-1"
+        numExecutors: 2
+        launcher:
+          jnlp:
+            workDirSettings:
+              failIfWorkDirIsMissing: false
