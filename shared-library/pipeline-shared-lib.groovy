@@ -1,4 +1,4 @@
-node('master') {
+node {
     stage('Checkout') {
         cleanWs()
         checkout scm

@@ -26,7 +26,7 @@ pipelineJob("jenkins/Setup") {
     definition {
         cps {
             script("""
-        node ("master") {
+        node {
             stage("SharedLib") {
                 build(job:'jenkins/SharedLib', parameters:[
                     string(name: 'revision', value: params.revision_configure)],
